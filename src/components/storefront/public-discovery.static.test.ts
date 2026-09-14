@@ -97,7 +97,7 @@ describe("qwen public discovery v1 static checks", () => {
     expect(joined).not.toContain("Burger House");
   });
 
-  it("shows Bagui as the public product name via APP_NAME", () => {
+  it("shows Bag It as the public product name via APP_NAME", () => {
     const info = read("src/lib/app-info.ts");
     const page = read("src/app/page.tsx");
     const header = read("src/components/storefront/public-header.tsx");
