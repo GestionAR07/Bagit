@@ -40,7 +40,7 @@ async function expectPublicRouteUsable(page: Page, path: string) {
       return;
     case "/login":
       await expect(
-        page.getByRole("heading", { name: "Ingresá a Bagui" }),
+        page.getByRole("heading", { name: "Ingresá a Bag It" }),
       ).toBeVisible();
       await expect(page.getByLabel("Email")).toBeVisible();
       await expect(page.getByLabel("Contraseña")).toBeVisible();
