@@ -15,7 +15,7 @@ export function PublicHero() {
             <span className="h-2 w-2 shrink-0 rounded-full bg-green-400" />
             Operando en {APP_SERVICE_AREA}
           </p>
-          <h1 className="public-hero-title font-display mt-6 max-w-full font-extrabold tracking-tight break-words text-[var(--ps-deep)]">
+          <h1 className="public-hero-title font-display mt-8 max-w-full font-extrabold tracking-tight break-words text-[var(--ps-deep)]">
             Todo lo de tu zona,{" "}
             <span className="grad-text block">en un solo lugar.</span>
           </h1>
