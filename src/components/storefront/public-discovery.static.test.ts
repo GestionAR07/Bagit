@@ -109,7 +109,7 @@ describe("qwen public discovery v1 static checks", () => {
     expect(info).toContain('export const APP_NAME = "Bag It"');
     expect(info).not.toMatch(/APP_NAME = "Marketplace Rawson"/);
     expect(wordmark).toContain("APP_NAME");
-    expect(wordmark).toContain('aria-label={APP_NAME}');
+    expect(wordmark).toContain("aria-label={APP_NAME}");
     expect(wordmark).toContain("PublicBrandMark");
     expect(wordmark).toContain("text-[#128fc8]");
     expect(wordmark).toContain("text-[var(--ps-sky)]");
