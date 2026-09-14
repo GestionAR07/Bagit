@@ -38,7 +38,7 @@ export function ActivateMerchantForm({
           Comercio activo
         </p>
         <p className="mt-1 text-sm leading-6 text-emerald-700">
-          Está habilitado para aparecer públicamente y operar en Pedilo.
+          Está habilitado para aparecer públicamente y operar en Bag It.
         </p>
       </div>
     );
