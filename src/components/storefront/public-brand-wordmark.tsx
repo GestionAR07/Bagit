@@ -55,7 +55,7 @@ function BrandName({ size }: { size: Size }) {
         textSize[size],
       )}
     >
-      <span aria-hidden className="text-[#0b78b5]">
+      <span aria-hidden className="text-[#128fc8]">
         B
       </span>
       <span aria-hidden className="text-[var(--ps-sky)]">
