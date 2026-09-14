@@ -34,7 +34,7 @@ export async function startGoogleOAuthAction(
     );
   } catch {
     return {
-      error: "La URL pública de Pedilo no está configurada.",
+      error: "La URL pública de Bag It no está configurada.",
     };
   }
 
