@@ -1,6 +1,6 @@
-import { APP_NAME, APP_SERVICE_AREA, APP_TAGLINE } from "@/lib/app-info";
+import { APP_OPERATING_MESSAGE } from "@/lib/app-info";
 
-const MARQUEE_MESSAGE = `${APP_NAME} · ${APP_TAGLINE} · ${APP_SERVICE_AREA}`;
+const MARQUEE_MESSAGE = APP_OPERATING_MESSAGE;
 
 function MarqueeSegment() {
   return (
