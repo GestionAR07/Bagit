@@ -204,7 +204,7 @@ export function MerchantCreateForm({ cities, zones }: MerchantCreateFormProps) {
         </p>
         <p className="mt-1 text-xs leading-5 text-slate-500">
           Todavía no será visible para clientes. La entrega gestionada por
-          Pedilo permanece deshabilitada en esta etapa.
+          Bag It permanece deshabilitada en esta etapa.
         </p>
       </div>
 
