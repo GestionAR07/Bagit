@@ -11,6 +11,9 @@ export const APP_TAGLINE = "Pedí cerca en Rawson y Playa Unión";
 
 export const APP_SERVICE_AREA = "Rawson · Playa Unión";
 
+export const APP_OPERATING_MESSAGE =
+  "Actualmente operando en Rawson y Playa Unión";
+
 export function getFoundationStatusLabel(): string {
   return `${APP_NAME} — ${APP_TAGLINE}`;
 }
