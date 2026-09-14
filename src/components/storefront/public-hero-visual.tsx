@@ -54,7 +54,7 @@ function HeroCard({
 
 export function PublicHeroVisual({
   mediaSrc = PUBLIC_HERO_MEDIA_SRC,
-  mediaAlt = "Bolsa Pedilo con productos de compra",
+  mediaAlt = "Bolsa Bag It con productos de compra",
 }: Props) {
   return (
     <div className="public-hero-visual">
