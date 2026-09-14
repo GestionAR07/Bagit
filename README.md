@@ -1,8 +1,8 @@
-# Pedilo
+# Bag It
 
 Marketplace local de pedidos online orientado inicialmente a **Rawson y Playa Unión, Chubut**, con arquitectura preparada para ampliar la operación a otras ciudades.
 
-Pedilo conecta compradores y comercios locales en una misma plataforma: descubrimiento por zona, catálogo, carrito, checkout, retiro o delivery propio, seguimiento de pedidos y un panel operativo para cada comercio.
+Bag It conecta compradores y comercios locales en una misma plataforma: descubrimiento por zona, catálogo, carrito, checkout, retiro o delivery propio, seguimiento de pedidos y un panel operativo para cada comercio.
 
 ## Estado actual
 
@@ -198,4 +198,4 @@ drizzle/                     # migraciones SQL versionadas
 
 ## Licencia
 
-Proyecto privado de Pedilo. No distribuir, reutilizar ni publicar el código sin autorización.
+Proyecto privado de Bag It. No distribuir, reutilizar ni publicar el código sin autorización.
