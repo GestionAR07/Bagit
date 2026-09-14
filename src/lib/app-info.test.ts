@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   APP_NAME,
+  APP_OPERATING_MESSAGE,
   APP_SERVICE_AREA,
   APP_TAGLINE,
   getFoundationStatusLabel,
@@ -12,6 +13,9 @@ describe("app-info", () => {
     expect(APP_TAGLINE).toContain("Rawson");
     expect(APP_TAGLINE).toContain("Playa Unión");
     expect(APP_SERVICE_AREA).toBe("Rawson · Playa Unión");
+    expect(APP_OPERATING_MESSAGE).toBe(
+      "Actualmente operando en Rawson y Playa Unión",
+    );
   });
 
   it("builds a status label from name and tagline", () => {
