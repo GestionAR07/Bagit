@@ -43,7 +43,7 @@ export default async function SetPasswordPage({
           Establecer contraseña
         </h1>
         <p className="mt-2 text-sm text-muted">
-          Elegí una contraseña nueva para seguir usando Pedilo.
+          Elegí una contraseña nueva para seguir usando Bag It.
         </p>
         <div className="mt-7">
           <SetPasswordForm recoveryMode={recoveryMode} />
