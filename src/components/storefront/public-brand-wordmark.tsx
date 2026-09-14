@@ -65,7 +65,7 @@ function BrandName({ size }: { size: Size }) {
         g
       </span>
       <span aria-hidden className="text-[var(--ps-yellow)]">
-        It
+        it
       </span>
     </span>
   );
