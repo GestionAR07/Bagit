@@ -45,7 +45,7 @@ export function PublicMerchantCta() {
               id="merchant-cta-heading"
               className="merchant-cta-title font-display mt-3 font-extrabold tracking-tight break-words"
             >
-              Tu comercio también puede estar en Pedilo.
+              Tu comercio también puede estar en Bag It.
             </h2>
             <p className="mt-4 text-sm leading-relaxed break-words text-slate-200 sm:text-base">
               Mostrá tus productos, recibí pedidos y administrá tu operación
