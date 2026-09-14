@@ -94,7 +94,10 @@ export function PublicBrandWordmark({
           className,
         )}
       >
-        <PublicBrandMark size={lockupMarkSize[size]} surface={resolvedSurface} />
+        <PublicBrandMark
+          size={lockupMarkSize[size]}
+          surface={resolvedSurface}
+        />
         <BrandName size={size} />
       </span>
     );
