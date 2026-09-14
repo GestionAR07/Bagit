@@ -46,13 +46,7 @@ function resolveLayout(
   return showMark ? "lockup" : "logotype";
 }
 
-function BrandName({
-  size,
-  surface,
-}: {
-  size: Size;
-  surface: Surface;
-}) {
+function BrandName({ size }: { size: Size }) {
   return (
     <span
       aria-label={APP_NAME}
@@ -61,21 +55,24 @@ function BrandName({
         textSize[size],
       )}
     >
-      <span
-        aria-hidden
-        className={surface === "dark" ? "text-white" : "text-[var(--ps-deep)]"}
-      >
-        Bag
+      <span aria-hidden className="text-[#0b78b5]">
+        B
       </span>
-      <span aria-hidden className="text-[var(--ps-yellow)]">
-        ui
+      <span aria-hidden className="text-[var(--ps-sky)]">
+        a
+      </span>
+      <span aria-hidden className="text-[var(--ps-sky-medium)]">
+        g
+      </span>
+      <span aria-hidden className="ml-[0.22em] text-[var(--ps-yellow)]">
+        It
       </span>
     </span>
   );
 }
 
 /**
- * Bagui wordmark preview. Keeps the existing shopping-bag symbol while the
+ * Bag It wordmark preview. Keeps the existing shopping-bag symbol while the
  * final mascot and vector lettering are evaluated.
  */
 export function PublicBrandWordmark({
@@ -97,7 +94,7 @@ export function PublicBrandWordmark({
         )}
       >
         <PublicBrandMark size={lockupMarkSize[size]} surface={resolvedSurface} />
-        <BrandName size={size} surface={resolvedSurface} />
+        <BrandName size={size} />
       </span>
     );
   }
@@ -107,7 +104,7 @@ export function PublicBrandWordmark({
       <span
         className={cx("brand-wordmark inline-flex items-center", className)}
       >
-        <BrandName size={size} surface={resolvedSurface} />
+        <BrandName size={size} />
       </span>
     );
   }
@@ -120,7 +117,7 @@ export function PublicBrandWordmark({
       )}
     >
       <PublicBrandMark size={lockupMarkSize[size]} surface={resolvedSurface} />
-      <BrandName size={size} surface={resolvedSurface} />
+      <BrandName size={size} />
     </span>
   );
 }
