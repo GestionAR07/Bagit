@@ -166,7 +166,7 @@ export async function activateMerchantAction(
       error: null,
       success: result.value.alreadyActive
         ? "El comercio ya estaba activo."
-        : "Comercio activado. Ya puede aparecer en Pedilo.",
+        : "Comercio activado. Ya puede aparecer en Bag It.",
     };
   } catch (error) {
     return mapAuthzFailure(error);
