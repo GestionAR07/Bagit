@@ -5,7 +5,7 @@
  * The repository / project may still be called Marketplace Rawson;
  * this constant is the public name shown in the storefront.
  */
-export const APP_NAME = "Bagui";
+export const APP_NAME = "Bag It";
 
 export const APP_TAGLINE = "Pedí cerca en Rawson y Playa Unión";
 
