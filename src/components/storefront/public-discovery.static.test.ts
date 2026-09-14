@@ -269,9 +269,10 @@ describe("qwen public discovery v1 static checks", () => {
     expect(css).not.toContain("@keyframes spinSlow");
     expect(css).not.toContain("@keyframes badgeBounce");
 
-    expect(marquee).toContain("APP_NAME");
-    expect(marquee).toContain("APP_TAGLINE");
-    expect(marquee).toContain("APP_SERVICE_AREA");
+    expect(marquee).toContain("APP_OPERATING_MESSAGE");
+    expect(marquee).not.toContain("APP_NAME");
+    expect(marquee).not.toContain("APP_TAGLINE");
+    expect(marquee).not.toContain("APP_SERVICE_AREA");
     expect(marquee).toContain("public-marquee-static");
     expect(marquee).toContain("sr-only");
     expect(marquee).not.toContain("Envío gratis");
