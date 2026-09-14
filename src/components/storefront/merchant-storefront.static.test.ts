@@ -156,7 +156,7 @@ describe("qwen merchant storefront v2 static checks", () => {
     expect(css).toContain("padding-inline: 1rem");
   });
 
-  it("uses the real signed cover with Pedilo fallback and never raw paths", () => {
+  it("uses the real signed cover with Bag It fallback and never raw paths", () => {
     const types = read("src/application/storefront/types.ts");
     const catalog = read("src/application/storefront/merchant-catalog.ts");
     const wiring = read("src/application/storefront/wiring.ts");
