@@ -84,7 +84,7 @@ export default async function AdminMerchantsPage() {
             Comercios
           </h1>
           <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
-            Administrá los comercios que operan en Pedilo y controlá su estado,
+            Administrá los comercios que operan en Bag It y controlá su estado,
             cobertura y modalidad de entrega.
           </p>
         </div>
