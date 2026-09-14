@@ -35,7 +35,7 @@ function cx(...parts: Array<string | false | undefined>): string {
 }
 
 /**
- * Official Pedilo isotipo extracted from pedilo-logo-master.svg.
+ * Official Bag It isotipo extracted from pedilo-logo-master.svg.
  */
 export function PublicBrandMark({
   size = "header",

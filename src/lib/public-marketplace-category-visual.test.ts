@@ -38,7 +38,7 @@ describe("public marketplace category visual mapping", () => {
     ).toBe("store");
   });
 
-  it("picks a stable Pedilo palette from the category id", () => {
+  it("picks a stable Bag It palette from the category id", () => {
     const id = "33333333-3333-4333-8333-333333333333";
     expect(marketplaceCategoryPalette(id)).toBe(marketplaceCategoryPalette(id));
     expect(hashMarketplaceCategoryId(id)).toBe(hashMarketplaceCategoryId(id));

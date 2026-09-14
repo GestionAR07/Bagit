@@ -119,7 +119,7 @@ export default async function AdminMerchantDetailPage({ params }: PageProps) {
             </div>
             <p className="mt-1.5 text-sm leading-6 text-slate-500">
               Revisá la configuración, responsables y preparación para operar en
-              Pedilo.
+              Bag It.
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default async function AdminMerchantDetailPage({ params }: PageProps) {
                         : "bg-slate-100 text-slate-400 ring-slate-200"
                     }`}
                   >
-                    Delivery Pedilo{" "}
+                    Delivery Bag It{" "}
                     {merchant.platformDeliveryEnabled
                       ? "habilitado"
                       : "deshabilitado"}

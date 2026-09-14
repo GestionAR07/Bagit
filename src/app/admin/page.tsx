@@ -232,7 +232,7 @@ export default async function AdminPage() {
       <header className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <p className="mb-1 text-xs font-extrabold tracking-[0.14em] text-[#20aee5] uppercase">
-            Pedilo Admin
+            Bag It Admin
           </p>
           <h1 className="font-display text-3xl font-extrabold tracking-tight text-[#083f66] sm:text-[2rem]">
             Panel administrativo

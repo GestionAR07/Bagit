@@ -2,10 +2,10 @@
  * Public feature switches for OAuth providers.
  *
  * Provider credentials remain exclusively in the provider consoles and
- * Supabase Dashboard. These flags only control whether Pedilo exposes a
+ * Supabase Dashboard. These flags only control whether Bag It exposes a
  * provider that has already been configured.
  *
- * Branding (consent screen name "Pedilo", custom auth domain) is configured
+ * Branding (consent screen name "Bag It", custom auth domain) is configured
  * outside this repo — see docs/GOOGLE_OAUTH.md.
  */
 export type AuthProviderEnv = Readonly<Record<string, string | undefined>>;

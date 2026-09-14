@@ -26,7 +26,7 @@ export default async function AdminGeographyPage() {
           Geografía
         </h1>
         <p className="mt-1.5 max-w-3xl text-sm leading-6 text-slate-500">
-          Organizá las provincias, ciudades y zonas donde Pedilo puede operar.
+          Organizá las provincias, ciudades y zonas donde Bag It puede operar.
           Esta estructura define la cobertura disponible para comercios y
           clientes.
         </p>
@@ -69,7 +69,7 @@ export default async function AdminGeographyPage() {
               Cobertura configurada
             </h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              Estructura geográfica actualmente disponible en Pedilo.
+              Estructura geográfica actualmente disponible en Bag It.
             </p>
           </div>
 

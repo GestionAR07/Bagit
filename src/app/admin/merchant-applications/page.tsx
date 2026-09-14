@@ -63,7 +63,7 @@ export default async function AdminMerchantApplicationsPage() {
         </h1>
         <p className="mt-1.5 max-w-2xl text-sm leading-6 text-slate-500">
           Revisá las postulaciones recibidas y acompañá cada comercio desde la
-          solicitud hasta su incorporación a Pedilo.
+          solicitud hasta su incorporación a Bag It.
         </p>
       </header>
 
@@ -134,7 +134,7 @@ export default async function AdminMerchantApplicationsPage() {
               No hay solicitudes registradas
             </p>
             <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-slate-500">
-              Cuando un comercio complete el formulario para sumarse a Pedilo,
+              Cuando un comercio complete el formulario para sumarse a Bag It,
               su solicitud aparecerá acá para que puedas revisarla.
             </p>
             <Link

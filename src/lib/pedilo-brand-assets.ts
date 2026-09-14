@@ -1,4 +1,4 @@
-/** Official Pedilo brand asset paths (derivatives of pedilo-logo-master.svg). */
+/** Official Bag It brand asset paths (derivatives of pedilo-logo-master.svg). */
 export const PEDILO_LOGO_MASTER_SRC = "/brand/pedilo-logo-master.svg";
 export const PEDILO_LOGO_SRC = "/brand/pedilo-logo.svg";
 export const PEDILO_LOGO_REVERSED_SRC = "/brand/pedilo-logo-reversed.svg";

@@ -197,7 +197,7 @@ describe("qwen public discovery v1 static checks", () => {
     expect(card).not.toMatch(/rating/i);
   });
 
-  it("keeps Pedilo header glass without letting scrolled copy stay readable", () => {
+  it("keeps Bag It header glass without letting scrolled copy stay readable", () => {
     const css = read("src/styles/globals.css");
     const header = read("src/components/storefront/public-header.tsx");
     const navBlur = css.slice(

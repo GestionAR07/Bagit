@@ -46,7 +46,7 @@ export default async function SumarComercioPage() {
             </h1>
             <p className="mt-2 text-sm text-muted">
               Completá los datos y revisaremos la solicitud antes de habilitar
-              el alta en Pedilo.
+              el alta en Bag It.
             </p>
             <div className="mt-7">
               {!databaseAvailable ? (

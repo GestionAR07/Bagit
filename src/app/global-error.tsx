@@ -55,7 +55,7 @@ export default function GlobalError({
               color: "#20AEE5",
             }}
           >
-            Pedilo
+            Bag It
           </p>
           <h1
             style={{
@@ -65,7 +65,7 @@ export default function GlobalError({
               fontWeight: 800,
             }}
           >
-            Pedilo no pudo cargar correctamente
+            Bag It no pudo cargar correctamente
           </h1>
           <p style={{ margin: "0.75rem 0 0", fontSize: "0.95rem" }}>
             Intentá nuevamente. Si el problema continúa, volvé a ingresar más
@@ -111,7 +111,7 @@ export default function GlobalError({
                 textDecoration: "none",
               }}
             >
-              Volver a Pedilo
+              Volver a Bag It
             </Link>
           </div>
         </main>

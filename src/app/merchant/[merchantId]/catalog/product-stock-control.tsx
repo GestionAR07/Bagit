@@ -36,7 +36,7 @@ export function ProductStockControl({
         aria-hidden={!tracked}
       >
         <p className="merchant-workspace-field-help">
-          Pedilo dejará de ofrecerlo cuando no queden unidades.
+          Bag It dejará de ofrecerlo cuando no queden unidades.
         </p>
         <label className="merchant-workspace-field">
           <span>Cantidad</span>

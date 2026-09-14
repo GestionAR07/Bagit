@@ -130,7 +130,7 @@ describe("public landing close sections", () => {
     const login = read(LOGIN);
 
     expect(cta).toContain("PARA COMERCIOS");
-    expect(cta).toContain("Tu comercio también puede estar en Pedilo.");
+    expect(cta).toContain("Tu comercio también puede estar en Bag It.");
     expect(cta).toContain(
       "Mostrá tus productos, recibí pedidos y administrá tu operación",
     );
