@@ -102,7 +102,7 @@ describe("qwen cart v3 static checks", () => {
     expect(css).toContain("prefers-reduced-motion");
     expect(css).toContain(".cart-line-card");
     expect(client).not.toContain("image.qwenlm.ai");
-    expect(client).not.toContain("Pedilo");
+    expect(client).not.toContain("Bag It");
     expect(client).not.toContain("cupón");
     expect(client).not.toContain("rating");
     expect(Object.keys(deps).join(" ")).not.toMatch(
