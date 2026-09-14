@@ -3,6 +3,7 @@ import { sanitizeInternalPath } from "@/lib/safe-redirect";
 import Link from "next/link";
 import { PublicBrandWordmark } from "@/components/storefront/public-brand-wordmark";
 import { isGoogleOAuthEnabled } from "@/config/auth-providers";
+import { APP_NAME } from "@/lib/app-info";
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -63,7 +64,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           Cuenta
         </p>
         <h1 className="font-display mt-1 text-3xl font-extrabold tracking-tight text-[var(--ps-navy)]">
-          Ingresá a Pedilo
+          Ingresá a {APP_NAME}
         </h1>
         <p className="mt-2 text-sm text-muted">
           Consultá tus pedidos y continuá tu compra. Si administrás un comercio,

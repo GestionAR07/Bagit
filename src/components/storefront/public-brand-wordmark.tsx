@@ -1,11 +1,4 @@
-import Image from "next/image";
 import { APP_NAME } from "@/lib/app-info";
-import {
-  PEDILO_LOGO_REVERSED_SRC,
-  PEDILO_LOGO_SRC,
-  PEDILO_LOGOTYPE_REVERSED_SRC,
-  PEDILO_LOGOTYPE_SRC,
-} from "@/lib/pedilo-brand-assets";
 import { PublicBrandMark } from "@/components/storefront/public-brand-mark";
 
 type Size = "header" | "hero" | "compact";
@@ -33,16 +26,10 @@ const lockupMarkSize: Record<Size, MarkSize> = {
   compact: "compact",
 };
 
-const logotypeHeight: Record<Size, string> = {
-  header: "h-[1.45rem] w-auto sm:h-[1.625rem]",
-  hero: "h-8 w-auto sm:h-9",
-  compact: "h-6 w-auto",
-};
-
-const fullLogoHeight: Record<Size, string> = {
-  header: "h-10 w-auto",
-  hero: "h-24 w-auto sm:h-28",
-  compact: "h-16 w-auto",
+const textSize: Record<Size, string> = {
+  header: "text-[1.55rem] sm:text-[1.8rem]",
+  hero: "text-4xl sm:text-5xl",
+  compact: "text-xl",
 };
 
 function resolveLayout(
@@ -59,9 +46,35 @@ function resolveLayout(
   return showMark ? "lockup" : "logotype";
 }
 
+function BrandName({ size }: { size: Size }) {
+  return (
+    <span
+      aria-label={APP_NAME}
+      className={cx(
+        "font-display inline-flex translate-y-[1px] items-baseline leading-none font-extrabold tracking-[-0.045em]",
+        textSize[size],
+      )}
+    >
+      <span aria-hidden className="text-[#128fc8]">
+        B
+      </span>
+      <span aria-hidden className="text-[var(--ps-sky)]">
+        a
+      </span>
+      <span aria-hidden className="text-[var(--ps-sky-medium)]">
+        g
+      </span>
+      <span aria-hidden className="text-[var(--ps-yellow)]">
+        it
+      </span>
+    </span>
+  );
+}
+
 /**
- * Official Pedilo logo from pedilo-logo-master.svg derivatives.
- * Never reconstructs the wordmark with CSS typography.
+ * Bagit visual wordmark preview for the formal Bag It brand. Keeps the
+ * existing shopping-bag symbol while the final mascot and vector lettering
+ * are evaluated.
  */
 export function PublicBrandWordmark({
   size = "header",
@@ -72,23 +85,20 @@ export function PublicBrandWordmark({
 }: Props) {
   const resolvedSurface = surface ?? (size === "hero" ? "dark" : "light");
   const resolvedLayout = resolveLayout(layout, size, showMark);
-  const reversed = resolvedSurface === "dark";
 
   if (resolvedLayout === "full") {
     return (
       <span
-        className={cx("brand-wordmark inline-flex items-center", className)}
+        className={cx(
+          "brand-wordmark inline-flex flex-col items-center gap-1.5",
+          className,
+        )}
       >
-        <Image
-          src={reversed ? PEDILO_LOGO_REVERSED_SRC : PEDILO_LOGO_SRC}
-          alt={APP_NAME}
-          width={150}
-          height={150}
-          sizes={size === "hero" ? "224px" : "160px"}
-          className={cx("shrink-0 object-contain", fullLogoHeight[size])}
-          priority={size === "header"}
-          unoptimized
+        <PublicBrandMark
+          size={lockupMarkSize[size]}
+          surface={resolvedSurface}
         />
+        <BrandName size={size} />
       </span>
     );
   }
@@ -98,16 +108,7 @@ export function PublicBrandWordmark({
       <span
         className={cx("brand-wordmark inline-flex items-center", className)}
       >
-        <Image
-          src={reversed ? PEDILO_LOGOTYPE_REVERSED_SRC : PEDILO_LOGOTYPE_SRC}
-          alt={APP_NAME}
-          width={128}
-          height={35}
-          sizes={size === "header" ? "120px" : "96px"}
-          className={cx("shrink-0 object-contain", logotypeHeight[size])}
-          priority={size === "header"}
-          unoptimized
-        />
+        <BrandName size={size} />
       </span>
     );
   }
@@ -115,21 +116,12 @@ export function PublicBrandWordmark({
   return (
     <span
       className={cx(
-        "brand-wordmark brand-wordmark--lockup inline-flex items-center gap-2.5",
+        "brand-wordmark brand-wordmark--lockup inline-flex items-center gap-2",
         className,
       )}
     >
       <PublicBrandMark size={lockupMarkSize[size]} surface={resolvedSurface} />
-      <Image
-        src={reversed ? PEDILO_LOGOTYPE_REVERSED_SRC : PEDILO_LOGOTYPE_SRC}
-        alt={APP_NAME}
-        width={128}
-        height={35}
-        sizes={size === "header" ? "120px" : "96px"}
-        className={cx("min-w-0 shrink object-contain", logotypeHeight[size])}
-        priority={size === "header"}
-        unoptimized
-      />
+      <BrandName size={size} />
     </span>
   );
 }

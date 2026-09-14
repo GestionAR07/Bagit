@@ -5,7 +5,7 @@ import {
 } from "../lib/no-page-crash";
 
 test.describe("B — deterministic public routes (GET only, no mutations)", () => {
-  test("public home renders Pedilo storefront chrome", async ({ page }) => {
+  test("public home renders Bag It storefront chrome", async ({ page }) => {
     const { errors } = attachPageCrashGuard(page);
     await page.goto("/", { waitUntil: "domcontentloaded" });
 
@@ -34,7 +34,7 @@ test.describe("B — deterministic public routes (GET only, no mutations)", () =
     await page.goto("/login", { waitUntil: "domcontentloaded" });
 
     await expect(
-      page.getByRole("heading", { name: "Ingresá a Pedilo" }),
+      page.getByRole("heading", { name: "Ingresá a Bag It" }),
     ).toBeVisible();
     await expect(page.getByLabel("Email")).toBeVisible();
     await expect(page.getByLabel("Contraseña")).toBeVisible();
