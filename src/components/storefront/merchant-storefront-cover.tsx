@@ -11,7 +11,7 @@ type Props = {
 
 /**
  * Wide storefront cover. Uses the signed coverUrl from the server DTO,
- * or the shared Pedilo fallback. Never renders a storage path.
+ * or the shared Bag It fallback. Never renders a storage path.
  */
 export function MerchantStorefrontCover({
   name,
