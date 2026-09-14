@@ -64,7 +64,7 @@ function BrandName({ size }: { size: Size }) {
       <span aria-hidden className="text-[var(--ps-sky-medium)]">
         g
       </span>
-      <span aria-hidden className="ml-[0.22em] text-[var(--ps-yellow)]">
+      <span aria-hidden className="text-[var(--ps-yellow)]">
         It
       </span>
     </span>
@@ -72,7 +72,7 @@ function BrandName({ size }: { size: Size }) {
 }
 
 /**
- * Bag It wordmark preview. Keeps the existing shopping-bag symbol while the
+ * Bagit visual wordmark preview for the formal Bag It brand. Keeps the existing shopping-bag symbol while the
  * final mascot and vector lettering are evaluated.
  */
 export function PublicBrandWordmark({
