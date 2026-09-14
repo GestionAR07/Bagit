@@ -56,7 +56,7 @@ export function MerchantApplicationForm({
           Solicitud enviada
         </h2>
         <p className="text-sm leading-relaxed text-muted md:text-base">
-          Recibimos los datos de tu comercio. El equipo de Pedilo va a revisar
+          Recibimos los datos de tu comercio. El equipo de Bag It va a revisar
           la solicitud antes de habilitar el alta.
         </p>
         <p className="text-sm leading-relaxed text-muted md:text-base">
@@ -67,7 +67,7 @@ export function MerchantApplicationForm({
           href="/"
           className="grad-btn inline-flex min-h-12 items-center rounded-full px-7 py-3 text-sm font-extrabold shadow-glow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ps-cyan)]"
         >
-          Volver a Pedilo
+          Volver a Bag It
         </Link>
       </div>
     );
@@ -83,7 +83,7 @@ export function MerchantApplicationForm({
       </h1>
       <p className="mt-2 text-sm text-muted">
         Completá los datos y revisaremos la solicitud antes de habilitar el alta
-        en Pedilo.
+        en Bag It.
       </p>
       <div className="mt-7">
         <form
