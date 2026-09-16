@@ -22,7 +22,12 @@ const PRODUCTION_APEXES = [
   "bagit.com.ar",
 ] as const;
 
-const PRODUCTION_HOST_LABEL = PRODUCTION_APEXES.join(", ");
+const NETLIFY_PRODUCTION_SUFFIXES = ["--bagitar.netlify.app"] as const;
+
+const PRODUCTION_HOST_LABEL = [
+  ...PRODUCTION_APEXES,
+  `*${NETLIFY_PRODUCTION_SUFFIXES[0]}`,
+].join(", ");
 
 export function normalizeHostname(hostname: string): string {
   let host = hostname
@@ -45,9 +50,13 @@ export function isBlockedProductionHost(hostname: string): boolean {
   if (!host) {
     return false;
   }
-  return PRODUCTION_APEXES.some(
+  const matchesApex = PRODUCTION_APEXES.some(
     (apex) => host === apex || host.endsWith(`.${apex}`),
   );
+  const matchesNetlifyDeploy = NETLIFY_PRODUCTION_SUFFIXES.some((suffix) =>
+    host.endsWith(suffix),
+  );
+  return matchesApex || matchesNetlifyDeploy;
 }
 
 function assertRemoteDevAuthorized(hostname: string, env: E2eGuardEnv): void {
