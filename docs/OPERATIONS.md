@@ -1,4 +1,4 @@
-# Pedilo Operations Runbook
+# Bag It Operations Runbook
 
 ## 1. Propósito
 
@@ -79,7 +79,7 @@ No detecta: que la publishable key, la secret key y `DATABASE_URL` pertenezcan a
 
 Checklist manual. Dominio aún no fijado: usar `https://<dominio-pedilo>`.
 
-- [ ] Proyecto Supabase PROD creado (distinto de DEV)
+- [x] Proyecto Supabase PROD creado (distinto de DEV)
 - [ ] Postgres separado
 - [ ] Auth separado
 - [ ] Storage separado
@@ -130,7 +130,7 @@ Hacer backup **antes** del primer tráfico real y **antes** de cada `db:migrate`
 
 ### PostgreSQL
 
-Incluye el estado de negocio que Pedilo no puede reconstruir desde el código:
+Incluye el estado de negocio que Bag It no puede reconstruir desde el código:
 
 - merchants, categorías, productos, opciones, stock
 - orders, ítems, eventos, deliveries
@@ -190,7 +190,7 @@ No revierte migraciones. Si el release nuevo ya aplicó SQL, el código viejo pu
 
 Solo con procedimiento explícito y backup identificado.
 
-Las migraciones de Pedilo no se asumen reversibles. No escribir ni ejecutar SQL inverso improvisado sobre producción.
+Las migraciones de Bag It no se asumen reversibles. No escribir ni ejecutar SQL inverso improvisado sobre producción.
 
 Si el schema o los datos de negocio quedaron mal, restaurar el backup de la sección 7 en un proyecto de recuperación, verificar, y recién después cortar el tráfico. No “desmigrar” en vivo.
 
@@ -261,7 +261,7 @@ Canal humano: una persona de guardia con acceso al hosting y al dashboard de **P
 
 ## 11. Logs operativos
 
-Baseline mínima en `src/lib/operational-log.ts`. Escribe JSON a la salida estándar del servidor. No hay archivo de log, tabla ni proveedor externo (no Sentry).
+El baseline local en `src/lib/operational-log.ts` escribe JSON seguro a la salida estándar. Sentry complementa este registro con captura remota en servidor, edge y cliente; debe comprobarse la recepción real de un error controlado antes del piloto.
 
 Eventos conectados:
 
@@ -276,7 +276,7 @@ Prohibido en logs: passwords, tokens, cookies, Authorization, service role, keys
 
 Si el logger falla al serializar, no debe romper el pedido. Storage upload e Auth invite todavía no emiten eventos.
 
-Los fallos de render usan `src/app/error.tsx`, `global-error.tsx` y `not-found.tsx`. Esas pantallas no muestran `error.message`, stack ni digest, y no envían el objeto Error al logger. La captura remota de errores de cliente (Sentry u otro proveedor) sigue fuera de alcance.
+Los fallos de render usan `src/app/error.tsx`, `global-error.tsx` y `not-found.tsx`. Esas pantallas no muestran `error.message`, stack ni digest. La instrumentación de Sentry captura errores remotos sin exponer detalles técnicos al usuario.
 
 `GET /api/health` es solo liveness: HTTP 200 y `{"status":"ok"}` si el proceso Next responde. No prueba PostgreSQL, Auth ni Storage. No escribe logs. Un chequeo de readiness queda para más adelante, cuando un balanceador lo necesite de verdad.
 
@@ -294,7 +294,7 @@ No iniciar con comercios reales si falta un ítem de INFRA o AUTH. OPERATIONS ma
 
 ### INFRA
 
-- [ ] Supabase PROD separado
+- [x] Supabase PROD separado
 - [ ] dominio + HTTPS
 - [ ] secrets PROD solo en hosting
 - [ ] migrations aplicadas al proyecto correcto
