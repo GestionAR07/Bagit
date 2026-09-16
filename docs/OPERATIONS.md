@@ -57,7 +57,7 @@ Nombres reales usados por este repo. En el dashboard de Supabase la publishable 
 | `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                              |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                             |
 | `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                       |
-| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`. |
+| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`.  |
 | `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                        |
 | `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.            |
 | `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                              |
