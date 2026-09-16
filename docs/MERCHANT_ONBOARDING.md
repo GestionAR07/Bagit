@@ -1,8 +1,8 @@
-# Merchant onboarding — Pedilo
+# Merchant onboarding — Bag It
 
 Estado actual: `MERCHANT_ONBOARDING_ACTIVE_FLOW_VALIDATED`.
 
-El alta de comercios es asistida: una solicitud pública pasa por revisión ADMIN, crea un comercio `DRAFT`, el propietario configura el comercio y luego un ADMIN lo activa manualmente cuando cumple los requisitos mínimos. Un comercio `DRAFT` no se publica en Pedilo.
+El alta de comercios es asistida: una solicitud pública pasa por revisión ADMIN, crea un comercio `DRAFT`, el propietario configura el comercio y luego un ADMIN lo activa manualmente cuando cumple los requisitos mínimos. Un comercio `DRAFT` no se publica en Bag It.
 
 ## Variables de entorno
 
@@ -42,7 +42,7 @@ Ajustar el puerto si el servidor local usa otro.
 
 ### Plantilla Invite user
 
-La invitación debe usar el callback SSR de Pedilo con `token_hash`:
+La invitación debe usar el callback SSR de Bag It con `token_hash`:
 
 ```html
 <a
@@ -80,7 +80,7 @@ Usuario envía /sumar-comercio
   → OWNER configura operación, pagos y catálogo
   → ADMIN revisa readiness
   → ADMIN activa DRAFT → ACTIVE
-  → comercio visible públicamente en Pedilo
+  → comercio visible públicamente en Bag It
 ```
 
 La activación es **manual** y solo admite `DRAFT → ACTIVE`. La reactivación de `SUSPENDED` queda separada.
@@ -165,7 +165,7 @@ La batería WRITE_DEV de multitenancy valida además que un `STAFF` puede usar s
 
 ## Password recovery
 
-Pedilo ya expone `/forgot-password` desde el login. La acción normaliza/valida el email, usa `resetPasswordForEmail`, construye el callback desde `APP_BASE_URL` y muestra una respuesta neutral para no revelar existencia de cuentas.
+Bag It ya expone `/forgot-password` desde el login. La acción normaliza/valida el email, usa `resetPasswordForEmail`, construye el callback desde `APP_BASE_URL` y muestra una respuesta neutral para no revelar existencia de cuentas.
 
 `/auth/confirm` soporta `type=recovery` y establece la sesión necesaria para continuar en `/set-password`. No confundir recovery con invite: deben usar su `type` correspondiente.
 
