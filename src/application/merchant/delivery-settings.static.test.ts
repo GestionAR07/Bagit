@@ -44,21 +44,24 @@ describe("merchant delivery settings static checks", () => {
     expect(actions).not.toMatch(/export const /);
   });
 
-  it("does not expose platform delivery or create geographic zones", () => {
+  it("lets the merchant configure pickup and own delivery only", () => {
     const form = read(
       "src/app/merchant/[merchantId]/delivery/delivery-settings-form.tsx",
     );
     const page = read("src/app/merchant/[merchantId]/delivery/page.tsx");
+    const actions = read("src/app/merchant/[merchantId]/delivery/actions.ts");
     const useCase = read("src/application/merchant/delivery-settings.ts");
+    expect(form).toContain("Ofrecer retiro en el comercio");
+    expect(form).toContain("pickup_enabled");
     expect(form).toContain("Ofrecer envío a domicilio");
     expect(form).toContain(
       "Los clientes podrán elegir entrega en las zonas que tengas activas.",
     );
     expect(form).toContain("merchant_delivery_enabled");
+    expect(actions).toContain('formData.get("pickup_enabled")');
     expect(form).toContain("merchant-workspace-switch-input");
     expect(form).toContain("merchant-workspace-form-actions");
     expect(form).toContain("Guardar cambios");
-    expect(form).not.toContain("Realizo envíos con el comercio");
     expect(form).not.toContain("platform_delivery");
     expect(form).not.toContain("PLATFORM_DELIVERY");
     expect(form).not.toContain("Delivery de la plataforma");
@@ -70,7 +73,7 @@ describe("merchant delivery settings static checks", () => {
     expect(useCase).not.toContain("insertCity");
   });
 
-  it("parses money with existing helpers and persists integer cents", () => {
+  it("parses money and persists fulfillment without platform delivery writes", () => {
     const useCase = read("src/application/merchant/delivery-settings.ts");
     const repo = read(
       "src/infrastructure/db/repositories/merchant-delivery-repository.ts",
@@ -78,7 +81,7 @@ describe("merchant delivery settings static checks", () => {
     expect(useCase).toContain("parseMoneyInputToCents");
     expect(repo).toContain("moneyCents");
     expect(repo).toContain("db.transaction");
+    expect(repo).toContain("pickupEnabled");
     expect(repo).not.toContain("platformDeliveryEnabled");
-    expect(repo).not.toContain("pickupEnabled");
   });
 });
