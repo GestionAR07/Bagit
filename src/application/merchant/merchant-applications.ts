@@ -98,7 +98,7 @@ export type ApproveMerchantApplicationDeps = {
   ) => Promise<T>;
   findMerchantApplicationById: (
     applicationId: string,
-    tx: MerchantApplicationTx,
+    tx?: MerchantApplicationTx,
   ) => Promise<MerchantApplicationRecord | null>;
   insertMerchantDraft: (
     input: {
@@ -121,6 +121,17 @@ export type ApproveMerchantApplicationDeps = {
     },
     tx: MerchantApplicationTx,
   ) => Promise<MerchantApplicationRecord | null>;
+  findRegisteredUserByEmail?: (
+    email: string,
+  ) => Promise<{ id: string; emailConfirmed: boolean } | null>;
+  ensureUserProfile?: (input: {
+    userId: string;
+    displayName?: string | null;
+  }) => Promise<void>;
+  insertOwnerMembership?: (
+    input: { merchantId: string; userId: string },
+    tx: MerchantApplicationTx,
+  ) => Promise<void>;
   isUniqueViolation: (error: unknown) => boolean;
 };
 
@@ -330,6 +341,38 @@ export async function approveMerchantApplication(
     });
   }
 
+  let ownerUserId: string | null = null;
+  if (
+    deps.findRegisteredUserByEmail &&
+    deps.ensureUserProfile &&
+    deps.insertOwnerMembership
+  ) {
+    const application = await deps.findMerchantApplicationById(applicationId);
+    if (!application) {
+      return err({
+        code: "APPLICATION_NOT_FOUND",
+        message: "La solicitud no existe.",
+      });
+    }
+    if (application.status !== "PENDING") {
+      return err({
+        code: "APPLICATION_NOT_PENDING",
+        message: "La solicitud ya fue revisada.",
+      });
+    }
+
+    const registeredUser = await deps.findRegisteredUserByEmail(
+      application.contactEmail,
+    );
+    if (registeredUser?.emailConfirmed) {
+      await deps.ensureUserProfile({
+        userId: registeredUser.id,
+        displayName: application.contactName,
+      });
+      ownerUserId = registeredUser.id;
+    }
+  }
+
   try {
     const result = await deps.runTransaction(async (tx) => {
       const application = await deps.findMerchantApplicationById(
@@ -368,6 +411,21 @@ export async function approveMerchantApplication(
           code: "INVARIANT_VIOLATION",
           message: "El comercio no respetó las reglas de onboarding.",
         });
+      }
+
+      if (ownerUserId && deps.insertOwnerMembership) {
+        try {
+          await deps.insertOwnerMembership(
+            { merchantId: merchant.id, userId: ownerUserId },
+            tx,
+          );
+        } catch {
+          abort({
+            code: "OWNER_LINK_FAILED",
+            message:
+              "No se pudo vincular la cuenta registrada como propietaria del comercio.",
+          });
+        }
       }
 
       const approved = await deps.markApproved(

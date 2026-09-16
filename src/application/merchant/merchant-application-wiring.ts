@@ -25,10 +25,17 @@ import {
   insertMerchantDraft,
 } from "@/infrastructure/db/repositories/merchant-repository";
 import {
+  ensureUserProfile,
+  insertMerchantOwner,
+} from "@/infrastructure/db/repositories/merchant-user-repository";
+import {
   findCityById,
   findZoneById,
 } from "@/infrastructure/db/repositories/geography-repository";
 import { isUniqueViolation } from "@/infrastructure/db/pg-errors";
+import { createSupabaseAdminClient } from "@/infrastructure/supabase/admin";
+import { findAuthUserByEmail } from "@/infrastructure/supabase/auth-admin";
+import { hasSupabaseSecretKey } from "@/infrastructure/supabase/env";
 import { requirePlatformAdmin } from "@/server/auth/authorization";
 
 type MerchantApplicationDbTx = Parameters<Parameters<Db["transaction"]>[0]>[0];
@@ -52,6 +59,21 @@ function approveDeps(): ApproveMerchantApplicationDeps {
     findMerchantApplicationById,
     insertMerchantDraft,
     markApproved,
+    findRegisteredUserByEmail: async (email) => {
+      if (!hasSupabaseSecretKey()) {
+        return null;
+      }
+      try {
+        const admin = createSupabaseAdminClient();
+        return await findAuthUserByEmail(admin, email);
+      } catch {
+        return null;
+      }
+    },
+    ensureUserProfile,
+    insertOwnerMembership: async (input, tx) => {
+      await insertMerchantOwner(input, tx);
+    },
     isUniqueViolation,
   };
 }
