@@ -27,7 +27,10 @@ describe("merchant owner linking hardening", () => {
     expect(detail).toContain("{hasOwner ? (");
     expect(detail).toContain("Propietario vinculado");
     expect(detail).toContain(
-      "No hace falta enviar una invitación para completar el onboarding.",
+      "El comercio ya tiene una cuenta propietaria activa. No hace",
+    );
+    expect(detail).toContain(
+      "falta enviar una invitación para completar el onboarding.",
     );
     expect(detail).not.toContain("Invitar otro propietario");
     expect(detail).toContain("<InviteOwnerForm merchantId={merchant.id} />");
