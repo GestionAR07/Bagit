@@ -56,7 +56,7 @@ export type SaveDeliveryZoneInput = {
 };
 
 export type SaveMerchantDeliverySettingsInput = {
-  pickupEnabled: boolean;
+  pickupEnabled?: boolean;
   merchantDeliveryEnabled: boolean;
   zones: readonly SaveDeliveryZoneInput[];
 };
@@ -77,7 +77,7 @@ export type DeliverySettingsWriteDeps = {
   saveDeliverySettings: (
     merchantId: string,
     input: {
-      pickupEnabled: boolean;
+      pickupEnabled?: boolean;
       merchantDeliveryEnabled: boolean;
       zones: readonly {
         zoneId: string;
@@ -302,9 +302,13 @@ export async function saveMerchantDeliverySettings(
     });
   }
 
+  const nextPickupEnabled = input.pickupEnabled ?? merchant.pickupEnabled;
+
   try {
     const savedRows = await deps.saveDeliverySettings(merchantId, {
-      pickupEnabled: Boolean(input.pickupEnabled),
+      ...(input.pickupEnabled === undefined
+        ? {}
+        : { pickupEnabled: Boolean(input.pickupEnabled) }),
       merchantDeliveryEnabled: Boolean(input.merchantDeliveryEnabled),
       zones: zonesToPersist,
     });
@@ -312,7 +316,7 @@ export async function saveMerchantDeliverySettings(
       presentDeliverySettings({
         merchant: {
           ...merchant,
-          pickupEnabled: Boolean(input.pickupEnabled),
+          pickupEnabled: nextPickupEnabled,
           merchantDeliveryEnabled: Boolean(input.merchantDeliveryEnabled),
         },
         cityZones,
