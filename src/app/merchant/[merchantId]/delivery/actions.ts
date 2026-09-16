@@ -27,6 +27,7 @@ export async function saveMerchantDeliverySettingsAction(
       .filter((value) => value.length > 0);
 
     const result = await saveMerchantDeliverySettingsApp(merchantId, {
+      pickupEnabled: formData.get("pickup_enabled") === "on",
       merchantDeliveryEnabled:
         formData.get("merchant_delivery_enabled") === "on",
       zones: zoneIds.map((zoneId) => ({
