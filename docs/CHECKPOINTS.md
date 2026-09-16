@@ -122,6 +122,12 @@ Validado en DEV:
 
 Merge de referencia: PR #17, `92878e3` en `main`.
 
+## Seguridad pre-piloto
+
+### `PRE_PILOT_E2E_PRODUCTION_HOST_GUARD_HARDENED`
+
+El guard E2E bloquea `pedilo.store`, `bagitar.netlify.app`, `bagit.ar`, `bagit.com.ar` y todos sus subdominios, incluso cuando se suministran las banderas de DEV remoto. Los sufijos engañosos que no son subdominios reales no se bloquean.
+
 ## Estado actual
 
 ### `PRE_PILOT_SAFE_OPERATIONAL_LOGGING_IMPLEMENTED`
