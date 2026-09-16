@@ -4,7 +4,7 @@ import {
   MAX_PENDING_APPLICATIONS_PER_EMAIL,
   MERCHANT_APPLICATION_LIMITS,
 } from "@/lib/merchant-application-limits";
-import { isValidSlug, normalizeSlug } from "@/lib/slug";
+import { normalizeSlug } from "@/lib/slug";
 import { isValidUuid } from "@/lib/uuid";
 import type {
   MerchantApplicationDbTx,
@@ -32,12 +32,13 @@ export type SubmitMerchantApplicationInput = {
   message?: string;
 };
 
+/**
+ * Approval is an administrative decision only. Operational configuration is
+ * intentionally not accepted from the admin flow; the owner completes it from
+ * the merchant workspace after approval.
+ */
 export type ApproveMerchantApplicationInput = {
   applicationId: string;
-  slug: string;
-  pickupEnabled: boolean;
-  merchantDeliveryEnabled: boolean;
-  preparationMinutes: number;
 };
 
 export type RejectMerchantApplicationInput = {
@@ -66,6 +67,20 @@ function mapAbort(error: unknown): MerchantApplicationError | null {
     return error.applicationError;
   }
   return null;
+}
+
+function buildApprovalSlug(
+  businessName: string,
+  applicationId: string,
+): string {
+  const suffix =
+    applicationId.replace(/[^a-z0-9]/gi, "").toLowerCase().slice(-8) ||
+    "comercio";
+  const normalizedName = normalizeSlug(businessName) || "comercio";
+  const maxBaseLength = Math.max(1, 80 - suffix.length - 1);
+  const base =
+    normalizedName.slice(0, maxBaseLength).replace(/-+$/g, "") || "comercio";
+  return `${base}-${suffix}`;
 }
 
 export type SubmitMerchantApplicationDeps = {
@@ -121,14 +136,14 @@ export type ApproveMerchantApplicationDeps = {
     },
     tx: MerchantApplicationTx,
   ) => Promise<MerchantApplicationRecord | null>;
-  findRegisteredUserByEmail?: (
+  findRegisteredUserByEmail: (
     email: string,
   ) => Promise<{ id: string; emailConfirmed: boolean } | null>;
-  ensureUserProfile?: (input: {
+  ensureUserProfile: (input: {
     userId: string;
     displayName?: string | null;
   }) => Promise<void>;
-  insertOwnerMembership?: (
+  insertOwnerMembership: (
     input: { merchantId: string; userId: string },
     tx: MerchantApplicationTx,
   ) => Promise<void>;
@@ -305,10 +320,7 @@ export async function approveMerchantApplication(
 > {
   const admin = await deps.requirePlatformAdmin();
   const reviewedByUserId = admin.user.id;
-
   const applicationId = input.applicationId.trim();
-  const slug = normalizeSlug(input.slug);
-  const preparationMinutes = Number(input.preparationMinutes);
 
   if (!applicationId) {
     return err({
@@ -316,76 +328,67 @@ export async function approveMerchantApplication(
       message: "La solicitud no es válida.",
     });
   }
-  if (!isValidSlug(slug)) {
+
+  const application = await deps.findMerchantApplicationById(applicationId);
+  if (!application) {
     return err({
-      code: "INVALID_SLUG",
-      message: "El slug no es válido (minúsculas, números y guiones).",
+      code: "APPLICATION_NOT_FOUND",
+      message: "La solicitud no existe.",
     });
   }
-  if (
-    !Number.isInteger(preparationMinutes) ||
-    preparationMinutes < 0 ||
-    preparationMinutes > 24 * 60
-  ) {
+  if (application.status !== "PENDING") {
     return err({
-      code: "INVALID_PREPARATION",
-      message: "El tiempo de preparación no es válido.",
+      code: "APPLICATION_NOT_PENDING",
+      message: "La solicitud ya fue revisada.",
     });
   }
 
+  const slug = buildApprovalSlug(application.businessName, application.id);
   const existingSlug = await deps.findMerchantBySlug(slug);
   if (existingSlug) {
     return err({
       code: "DUPLICATE_SLUG",
-      message: "Ya existe un comercio con ese slug.",
+      message:
+        "No se pudo reservar un identificador público para este comercio. Volvé a intentar.",
     });
   }
 
-  let ownerUserId: string | null = null;
-  if (
-    deps.findRegisteredUserByEmail &&
-    deps.ensureUserProfile &&
-    deps.insertOwnerMembership
-  ) {
-    const application = await deps.findMerchantApplicationById(applicationId);
-    if (!application) {
-      return err({
-        code: "APPLICATION_NOT_FOUND",
-        message: "La solicitud no existe.",
-      });
-    }
-    if (application.status !== "PENDING") {
-      return err({
-        code: "APPLICATION_NOT_PENDING",
-        message: "La solicitud ya fue revisada.",
-      });
-    }
-
-    const registeredUser = await deps.findRegisteredUserByEmail(
-      application.contactEmail,
-    );
-    if (registeredUser?.emailConfirmed) {
-      await deps.ensureUserProfile({
-        userId: registeredUser.id,
-        displayName: application.contactName,
-      });
-      ownerUserId = registeredUser.id;
-    }
+  const registeredUser = await deps.findRegisteredUserByEmail(
+    application.contactEmail,
+  );
+  if (!registeredUser) {
+    return err({
+      code: "APPLICANT_ACCOUNT_REQUIRED",
+      message:
+        "El solicitante debe tener una cuenta registrada con el mismo email antes de aprobar la solicitud.",
+    });
   }
+  if (!registeredUser.emailConfirmed) {
+    return err({
+      code: "APPLICANT_EMAIL_UNCONFIRMED",
+      message:
+        "El solicitante debe confirmar su email antes de que la solicitud pueda aprobarse.",
+    });
+  }
+
+  await deps.ensureUserProfile({
+    userId: registeredUser.id,
+    displayName: application.contactName,
+  });
 
   try {
     const result = await deps.runTransaction(async (tx) => {
-      const application = await deps.findMerchantApplicationById(
+      const currentApplication = await deps.findMerchantApplicationById(
         applicationId,
         tx,
       );
-      if (!application) {
+      if (!currentApplication) {
         abort({
           code: "APPLICATION_NOT_FOUND",
           message: "La solicitud no existe.",
         });
       }
-      if (application.status !== "PENDING") {
+      if (currentApplication.status !== "PENDING") {
         abort({
           code: "APPLICATION_NOT_PENDING",
           message: "La solicitud ya fue revisada.",
@@ -394,14 +397,14 @@ export async function approveMerchantApplication(
 
       const merchant = await deps.insertMerchantDraft(
         {
-          name: application.businessName,
+          name: currentApplication.businessName,
           slug,
-          description: application.description,
-          cityId: application.cityId,
-          zoneId: application.zoneId,
-          pickupEnabled: Boolean(input.pickupEnabled),
-          merchantDeliveryEnabled: Boolean(input.merchantDeliveryEnabled),
-          preparationMinutes,
+          description: currentApplication.description,
+          cityId: currentApplication.cityId,
+          zoneId: currentApplication.zoneId,
+          pickupEnabled: false,
+          merchantDeliveryEnabled: false,
+          preparationMinutes: 30,
         },
         tx,
       );
@@ -413,19 +416,17 @@ export async function approveMerchantApplication(
         });
       }
 
-      if (ownerUserId && deps.insertOwnerMembership) {
-        try {
-          await deps.insertOwnerMembership(
-            { merchantId: merchant.id, userId: ownerUserId },
-            tx,
-          );
-        } catch {
-          abort({
-            code: "OWNER_LINK_FAILED",
-            message:
-              "No se pudo vincular la cuenta registrada como propietaria del comercio.",
-          });
-        }
+      try {
+        await deps.insertOwnerMembership(
+          { merchantId: merchant.id, userId: registeredUser.id },
+          tx,
+        );
+      } catch {
+        abort({
+          code: "OWNER_LINK_FAILED",
+          message:
+            "No se pudo vincular la cuenta registrada como propietaria del comercio.",
+        });
       }
 
       const approved = await deps.markApproved(
@@ -455,7 +456,8 @@ export async function approveMerchantApplication(
     if (deps.isUniqueViolation(error)) {
       return err({
         code: "DUPLICATE_SLUG",
-        message: "Ya existe un comercio con ese slug.",
+        message:
+          "No se pudo reservar un identificador público para este comercio. Volvé a intentar.",
       });
     }
     return err({
