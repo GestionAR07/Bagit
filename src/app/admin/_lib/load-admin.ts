@@ -15,7 +15,7 @@ export async function loadAdminContext(
       if (error.code === "UNAUTHENTICATED" || error.code === "CONFIG_MISSING") {
         redirect(`/login?next=${encodeURIComponent(nextPath)}`);
       }
-      redirect(`/login?next=${encodeURIComponent(nextPath)}&error=forbidden`);
+      redirect("/acceso-denegado");
     }
     throw error;
   }
