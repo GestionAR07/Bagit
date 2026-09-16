@@ -138,13 +138,13 @@ Incluye el estado de negocio que Bag It no puede reconstruir desde el código:
 - geografía, horarios, pagos, zonas
 - paths de imágenes (`image_path`, `cover_image_path`), no los archivos
 
-Cómo obtenerlo depende del plan de Supabase (descarga/backup del dashboard o `pg_dump` con una URL de sesión/directa autorizada). No asumir PITR.
+El procedimiento ejecutable está en [`BACKUP_RESTORE.md`](./BACKUP_RESTORE.md) y `scripts/backup-supabase-production.ps1`. Usa `supabase db dump`, valida el Project Ref, genera roles/esquema/datos y un manifiesto con hashes. No asumir PITR ni usar un `pg_dump` completo improvisado sobre los schemas administrados.
 
 ### Supabase Auth
 
 `auth.users` no está modelado ni migrado por Drizzle. Un restore solo de tablas `public` deja perfiles sin usuario Auth, o usuarios sin poder entrar.
 
-Exportar o documentar el procedimiento de Auth del proyecto (usuarios, identidades Google vinculadas) como paso aparte. Si el plan no ofrece export automático, registrar al menos qué cuentas ADMIN/OWNER existen y cómo se reinvitarían, y no prometer un restore completo de contraseñas.
+El script registra si el volcado efectivo contiene `auth.users`; no lo presume porque el alcance puede variar según la CLI y el método. Aun si aparece, la configuración externa de Auth no se incluye: Google OAuth, SMTP, Site URL, Redirect URLs, API keys y sesiones deben reconstruirse. Registrar al menos qué cuentas ADMIN/OWNER existen y cómo se reinvitarían, y no prometer un restore completo hasta ensayarlo.
 
 ### Supabase Storage
 
