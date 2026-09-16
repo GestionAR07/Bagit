@@ -1,6 +1,6 @@
-# Pedilo E2E (Playwright)
+# Bag It E2E (Playwright)
 
-Pedilo usa Playwright en Chromium con dos modos deliberadamente separados:
+Bag It usa Playwright en Chromium con dos modos deliberadamente separados:
 
 - `READ_ONLY`: seguro por defecto y apto para CI;
 - `WRITE_DEV`: manual/local, con escritura real sólo contra el proyecto DEV autorizado.
