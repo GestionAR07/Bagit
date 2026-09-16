@@ -282,8 +282,9 @@ export default async function AdminMerchantDetailPage({ params }: PageProps) {
                       Propietario vinculado
                     </p>
                     <p className="mt-1 text-sm leading-6 text-emerald-700">
-                      El comercio ya tiene una cuenta propietaria activa. No hace
-                      falta enviar una invitación para completar el onboarding.
+                      El comercio ya tiene una cuenta propietaria activa. No
+                      hace falta enviar una invitación para completar el
+                      onboarding.
                     </p>
                   </div>
                 </div>
