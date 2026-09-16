@@ -79,6 +79,7 @@ describe("admin merchant applications UI (static)", () => {
     const approveForm = read(
       "src/app/admin/merchant-applications/application-approve-form.tsx",
     );
+    const normalizedApproveForm = approveForm.replace(/\s+/g, " ");
 
     for (const field of [
       "slug",
@@ -90,7 +91,7 @@ describe("admin merchant applications UI (static)", () => {
       expect(approveForm).not.toContain(`name=\"${field}\"`);
     }
     expect(approveForm).toContain("Aprobar solicitud");
-    expect(approveForm).toContain(
+    expect(normalizedApproveForm).toContain(
       "La configuración del comercio se completa luego desde su propio panel.",
     );
   });
