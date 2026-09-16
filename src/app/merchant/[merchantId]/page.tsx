@@ -8,6 +8,7 @@ import { MerchantOrderSoundToggle } from "@/components/merchant/merchant-order-s
 import { MerchantWorkspaceNav } from "@/components/merchant/merchant-workspace-nav";
 import { isAuthzError } from "@/server/auth/errors";
 import { requireMerchantMembership } from "@/server/auth/authorization";
+import { findMerchantActivationReadiness } from "@/infrastructure/db/repositories/merchant-activation-repository";
 import { findMerchantDetailForMember } from "@/infrastructure/db/repositories/merchant-repository";
 import { getMerchantOperationalStatus } from "@/domain/merchant/operational-availability";
 import type { MerchantStatus } from "@/domain/merchant/enums";
@@ -20,6 +21,10 @@ import {
   resumeMerchantOrdersAction,
 } from "./actions";
 import { MerchantOrderStatusPanel } from "./merchant-order-status-panel";
+import {
+  MerchantPublicationPanel,
+  type PublicationRequirement,
+} from "./merchant-publication-panel";
 
 export const dynamic = "force-dynamic";
 
@@ -70,6 +75,53 @@ export default async function MerchantDetailPage({ params }: PageProps) {
     merchantStatus: merchant.status as MerchantStatus,
     resumesAtLabel,
   });
+
+  const readiness =
+    merchant.status === "DRAFT"
+      ? await findMerchantActivationReadiness(merchantId)
+      : null;
+  const publicationRequirements: PublicationRequirement[] = readiness
+    ? [
+        {
+          key: "owner",
+          label: "Propietario activo",
+          complete: readiness.activeOwnerCount > 0,
+        },
+        {
+          key: "fulfillment",
+          label: "Retiro o delivery propio configurado",
+          complete:
+            readiness.pickupEnabled || readiness.merchantDeliveryEnabled,
+        },
+        ...(readiness.merchantDeliveryEnabled
+          ? [
+              {
+                key: "delivery-zone",
+                label: "Zona de delivery activa",
+                complete: readiness.activeDeliveryZoneCount > 0,
+              },
+            ]
+          : []),
+        {
+          key: "payment",
+          label: "Medio de pago activo",
+          complete: readiness.activePaymentMethodCount > 0,
+        },
+        {
+          key: "catalog",
+          label: "Producto publicado y disponible",
+          complete: readiness.activeCatalogProductCount > 0,
+        },
+      ]
+    : merchant.status === "DRAFT"
+      ? [
+          {
+            key: "readiness",
+            label: "No pudimos verificar la preparación del comercio",
+            complete: false,
+          },
+        ]
+      : [];
 
   let inbox = null;
   let inboxError: string | null = null;
@@ -144,6 +196,16 @@ export default async function MerchantDetailPage({ params }: PageProps) {
         <MerchantWorkspaceNav merchantId={merchantId} activeSection="orders" />
 
         <div className="merchant-ops-main min-w-0">
+          {merchant.status === "DRAFT" ? (
+            <div className="mb-5">
+              <MerchantPublicationPanel
+                merchantId={merchantId}
+                status={merchant.status}
+                requirements={publicationRequirements}
+              />
+            </div>
+          ) : null}
+
           {inbox ? (
             <section
               className="merchant-ops-summary"
