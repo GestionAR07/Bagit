@@ -104,7 +104,7 @@ No todas las suites necesitan ejecutarse en cada cambio. La regla es correr el s
 
 Todos los browser specs deben importar `test` desde `e2e/fixtures.ts` para heredar el guard de navegación.
 
-Targets de producción conocidos, incluido `pedilo.store` y variantes, se rechazan. Una excepción READ_ONLY hacia un host DEV remoto requiere opt-in explícito y **nunca** habilita WRITE_DEV.
+El guard conserva el bloqueo del dominio histórico `pedilo.store`. La URL productiva actual `bagitar.netlify.app` y el futuro dominio propio deben incorporarse explícitamente al conjunto bloqueado antes de ejecutar E2E remoto. Una excepción READ_ONLY hacia un host DEV remoto requiere opt-in explícito y **nunca** habilita WRITE_DEV.
 
 ## Artifacts
 
@@ -141,4 +141,4 @@ La base E2E crítica de comprador/comercio y multitenancy está validada. La rec
 
 READ_ONLY sigue siendo el único modo apto para CI: `npm run e2e` ignora `*.write.spec.ts` y no usa `SUPABASE_SECRET_KEY`. WRITE_DEV permanece explícito (`npm run e2e:dev` + `E2E_ALLOW_WRITES`) y no debe entrar a CI automático.
 
-La baseline de logging operativo seguro ya está implementada. Lo que sigue pendiente en observabilidad es la agregación/retención central de logs y la captura remota de errores de render, además del entorno PROD, backup/restore y QA en dispositivos reales. Ver [`OPERATIONS.md`](./OPERATIONS.md).
+La baseline de logging operativo seguro y Sentry remoto ya están implementados. Supabase PROD y Netlify productivo también están disponibles. Siguen pendientes el bloqueo explícito de los hosts productivos actuales en el guard E2E, backup/restore y QA en dispositivos reales. Ver [`OPERATIONS.md`](./OPERATIONS.md).
