@@ -37,6 +37,21 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Preview required formatting
+        run: |
+          npx prettier --write \
+            src/application/merchant/merchant-applications.ts \
+            src/application/merchant/merchant-applications.test.ts \
+            src/application/merchant/publish-merchant.test.ts
+          git diff -- \
+            src/application/merchant/merchant-applications.ts \
+            src/application/merchant/merchant-applications.test.ts \
+            src/application/merchant/publish-merchant.test.ts
+          git diff --exit-code -- \
+            src/application/merchant/merchant-applications.ts \
+            src/application/merchant/merchant-applications.test.ts \
+            src/application/merchant/publish-merchant.test.ts
+
       - name: Format check
         run: npm run format:check
 
