@@ -43,6 +43,27 @@ export function DeliverySettingsForm({ merchantId, settings }: Props) {
       <label className="merchant-workspace-card merchant-workspace-toggle-card merchant-workspace-toggle-card--switch">
         <input
           type="checkbox"
+          name="pickup_enabled"
+          defaultChecked={settings.pickupEnabled}
+          className="merchant-workspace-switch-input merchant-workspace-switch-input--overlay"
+        />
+        <div className="merchant-workspace-toggle-copy min-w-0">
+          <span className="merchant-workspace-card-title">
+            Ofrecer retiro en el comercio
+          </span>
+          <span className="merchant-workspace-card-copy">
+            Los clientes podrán retirar sus pedidos directamente en tu local.
+          </span>
+        </div>
+        <span
+          className="merchant-workspace-switch-track merchant-workspace-switch-track--decor"
+          aria-hidden="true"
+        />
+      </label>
+
+      <label className="merchant-workspace-card merchant-workspace-toggle-card merchant-workspace-toggle-card--switch">
+        <input
+          type="checkbox"
           name="merchant_delivery_enabled"
           defaultChecked={settings.merchantDeliveryEnabled}
           className="merchant-workspace-switch-input merchant-workspace-switch-input--overlay"
