@@ -69,7 +69,7 @@ export async function listMerchantDeliveryZones(
 export async function saveMerchantDeliverySettings(
   merchantId: string,
   input: {
-    pickupEnabled: boolean;
+    pickupEnabled?: boolean;
     merchantDeliveryEnabled: boolean;
     zones: readonly UpsertMerchantDeliveryZoneInput[];
   },
@@ -79,7 +79,9 @@ export async function saveMerchantDeliverySettings(
     await tx
       .update(merchants)
       .set({
-        pickupEnabled: input.pickupEnabled,
+        ...(input.pickupEnabled === undefined
+          ? {}
+          : { pickupEnabled: input.pickupEnabled }),
         merchantDeliveryEnabled: input.merchantDeliveryEnabled,
         updatedAt: new Date(),
       })
