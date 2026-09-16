@@ -38,17 +38,17 @@ const pendingApplication = (): MerchantApplicationRecord => ({
 const draftMerchant = (): MerchantDetailRecord => ({
   id: "merchant-1",
   name: "Panadería Norte",
-  slug: "panaderia-norte",
+  slug: "panadera-norte-app1",
   description: "Pan artesanal",
   status: "DRAFT",
   cityId: CITY_ID,
   zoneId: ZONE_ID,
   cityName: "Rawson",
   zoneName: "Centro",
-  pickupEnabled: true,
+  pickupEnabled: false,
   merchantDeliveryEnabled: false,
   platformDeliveryEnabled: false,
-  preparationMinutes: 20,
+  preparationMinutes: 30,
   acceptingOrders: true,
   pausedUntil: null,
   cityTimezone: "America/Argentina/Buenos_Aires",
@@ -95,6 +95,12 @@ function approveDeps(
       reviewedByUserId: "admin-1",
       reviewedAt: new Date("2026-01-02T00:00:00.000Z"),
     })),
+    findRegisteredUserByEmail: vi.fn(async () => ({
+      id: "owner-1",
+      emailConfirmed: true,
+    })),
+    ensureUserProfile: vi.fn(async () => undefined),
+    insertOwnerMembership: vi.fn(async () => undefined),
     isUniqueViolation: () => false,
     ...overrides,
   };
@@ -142,10 +148,6 @@ function repeatChar(length: number, char = "a"): string {
 
 const validApproveInput = {
   applicationId: "app-1",
-  slug: "panaderia-norte",
-  pickupEnabled: true,
-  merchantDeliveryEnabled: false,
-  preparationMinutes: 20,
 };
 
 describe("submitMerchantApplication", () => {
@@ -298,30 +300,66 @@ describe("approveMerchantApplication", () => {
     );
   });
 
-  it("creates a DRAFT merchant from the application inside the transaction", async () => {
+  it("creates a neutral DRAFT merchant for owner-managed onboarding", async () => {
     const deps = approveDeps();
     const result = await approveMerchantApplication(validApproveInput, deps);
     expect(result.ok).toBe(true);
     expect(deps.insertMerchantDraft).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "Panadería Norte",
-        slug: "panaderia-norte",
+        slug: "panadera-norte-app1",
         description: "Pan artesanal",
         cityId: CITY_ID,
         zoneId: ZONE_ID,
-        pickupEnabled: true,
+        pickupEnabled: false,
         merchantDeliveryEnabled: false,
-        preparationMinutes: 20,
+        preparationMinutes: 30,
       }),
       expect.anything(),
     );
   });
 
-  it("passes the same transaction client to merchant insert and markApproved", async () => {
+  it("requires a confirmed registered applicant before the transaction", async () => {
+    const missing = approveDeps({
+      findRegisteredUserByEmail: vi.fn(async () => null),
+    });
+    const missingResult = await approveMerchantApplication(
+      validApproveInput,
+      missing,
+    );
+    expect(missingResult.ok).toBe(false);
+    if (!missingResult.ok) {
+      expect(missingResult.error.code).toBe("APPLICANT_ACCOUNT_REQUIRED");
+    }
+    expect(missing.runTransaction).not.toHaveBeenCalled();
+
+    const unconfirmed = approveDeps({
+      findRegisteredUserByEmail: vi.fn(async () => ({
+        id: "owner-1",
+        emailConfirmed: false,
+      })),
+    });
+    const unconfirmedResult = await approveMerchantApplication(
+      validApproveInput,
+      unconfirmed,
+    );
+    expect(unconfirmedResult.ok).toBe(false);
+    if (!unconfirmedResult.ok) {
+      expect(unconfirmedResult.error.code).toBe(
+        "APPLICANT_EMAIL_UNCONFIRMED",
+      );
+    }
+    expect(unconfirmed.runTransaction).not.toHaveBeenCalled();
+  });
+
+  it("passes the same transaction client to merchant, owner and approval writes", async () => {
     const sharedTx = { id: "shared-tx" };
     const insertMerchantDraft = vi.fn(async (_input, tx) => {
       expect(tx).toBe(sharedTx);
       return draftMerchant();
+    });
+    const insertOwnerMembership = vi.fn(async (_input, tx) => {
+      expect(tx).toBe(sharedTx);
     });
     const markApproved = vi.fn(async (_input, tx) => {
       expect(tx).toBe(sharedTx);
@@ -336,11 +374,13 @@ describe("approveMerchantApplication", () => {
     const deps = approveDeps({
       runTransaction: vi.fn(async (fn) => fn(sharedTx as never)),
       insertMerchantDraft,
+      insertOwnerMembership,
       markApproved,
     });
 
     await approveMerchantApplication(validApproveInput, deps);
     expect(insertMerchantDraft).toHaveBeenCalledOnce();
+    expect(insertOwnerMembership).toHaveBeenCalledOnce();
     expect(markApproved).toHaveBeenCalledOnce();
   });
 
@@ -360,7 +400,7 @@ describe("approveMerchantApplication", () => {
     expect(deps.markApproved).not.toHaveBeenCalled();
   });
 
-  it("rejects duplicate slug before opening the transaction", async () => {
+  it("rejects a duplicate generated slug before opening the transaction", async () => {
     const deps = approveDeps({
       findMerchantBySlug: vi.fn(async () => ({ id: "existing" })),
     });
@@ -369,6 +409,9 @@ describe("approveMerchantApplication", () => {
     if (!result.ok) {
       expect(result.error.code).toBe("DUPLICATE_SLUG");
     }
+    expect(deps.findMerchantBySlug).toHaveBeenCalledWith(
+      "panadera-norte-app1",
+    );
     expect(deps.runTransaction).not.toHaveBeenCalled();
   });
 
@@ -382,6 +425,7 @@ describe("approveMerchantApplication", () => {
       expect(result.error.code).toBe("APPROVAL_MARK_FAILED");
     }
     expect(deps.insertMerchantDraft).toHaveBeenCalled();
+    expect(deps.insertOwnerMembership).toHaveBeenCalled();
     expect(deps.markApproved).toHaveBeenCalled();
   });
 
