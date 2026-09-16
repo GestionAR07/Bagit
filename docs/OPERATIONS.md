@@ -57,7 +57,7 @@ Nombres reales usados por este repo. En el dashboard de Supabase la publishable 
 | `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                              |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                             |
 | `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                       |
-| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-pedilo>`. |
+| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`. |
 | `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                        |
 | `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.            |
 | `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                              |
@@ -77,17 +77,17 @@ No detecta: que la publishable key, la secret key y `DATABASE_URL` pertenezcan a
 
 ## 4. Preflight antes de iniciar producción
 
-Checklist manual. Dominio aún no fijado: usar `https://<dominio-pedilo>`.
+Checklist manual. Dominio aún no fijado: usar `https://<dominio-bagit>`.
 
 - [x] Proyecto Supabase PROD creado (distinto de DEV)
 - [ ] Postgres separado
 - [ ] Auth separado
 - [ ] Storage separado
 - [ ] Variables PROD cargadas solo en hosting (no en Git, no en `.env.local` de desarrollo)
-- [ ] `APP_BASE_URL` apunta a `https://<dominio-pedilo>`
+- [ ] `APP_BASE_URL` apunta a `https://<dominio-bagit>`
 - [ ] HTTPS activo
-- [ ] Supabase Site URL = `https://<dominio-pedilo>`
-- [ ] Redirect URLs incluyen `https://<dominio-pedilo>/auth/confirm` (y el origen de la app)
+- [ ] Supabase Site URL = `https://<dominio-bagit>`
+- [ ] Redirect URLs incluyen `https://<dominio-bagit>/auth/confirm` (y el origen de la app)
 - [ ] Google OAuth configurado para el proyecto PROD (origen de producción; redirect del callback de _ese_ Supabase)
 - [ ] Recovery configurado para PROD (plantilla + redirect a `/auth/confirm`)
 - [ ] Invite configurado para PROD (misma ruta `/auth/confirm`)
@@ -196,12 +196,12 @@ Si el schema o los datos de negocio quedaron mal, restaurar el backup de la secc
 
 ## 9. Auth / OAuth / Recovery
 
-Al pasar de localhost a `https://<dominio-pedilo>` hay que cambiar configuración externa. El código ya arma redirects con `APP_BASE_URL`.
+Al pasar de localhost a `https://<dominio-bagit>` hay que cambiar configuración externa. El código ya arma redirects con `APP_BASE_URL`.
 
 Rutas que deben estar en la allow-list de **ese** proyecto Supabase:
 
-- `https://<dominio-pedilo>/auth/confirm` — confirmación de email, invite, recovery y callback PKCE de Google
-- Site URL = `https://<dominio-pedilo>`
+- `https://<dominio-bagit>/auth/confirm` — confirmación de email, invite, recovery y callback PKCE de Google
+- Site URL = `https://<dominio-bagit>`
 
 Flujos que dependen de eso:
 
@@ -212,7 +212,7 @@ Flujos que dependen de eso:
 
 Google (consola del cliente OAuth de producción, no la de DEV):
 
-- origen JavaScript: `https://<dominio-pedilo>`
+- origen JavaScript: `https://<dominio-bagit>`
 - redirect URI: el callback que muestra Supabase PROD (`https://<project-ref-prod>.supabase.co/auth/v1/callback`), no el de DEV
 
 No pegar Client ID, Client Secret ni service keys en Git ni en este documento.
@@ -328,7 +328,7 @@ No iniciar con comercios reales si falta un ítem de INFRA o AUTH. OPERATIONS ma
 
 ### OPERATIONS
 
-- [x] logs mínimos de fallos de pedido (baseline; sin proveedor externo)
+- [x] logs operativos mínimos y captura remota con Sentry
 - [x] error boundaries propios (sin captura remota de render)
 - [ ] backup
 - [ ] restore ensayado en proyecto descartable
