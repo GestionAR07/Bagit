@@ -1,4 +1,4 @@
-# Checkpoints — Pedilo
+# Checkpoints — Bag It
 
 Este archivo resume hitos funcionales relevantes. Los commits históricos detallados permanecen en Git; los checkpoints sirven como referencia de producto, no como sustituto del historial.
 
@@ -30,7 +30,7 @@ La UI pública “Olvidé mi contraseña” solicita recovery mediante Supabase 
 
 ### `PUBLIC_PASSWORD_RECOVERY_END_TO_END_VALIDATED`
 
-El flujo externo real quedó validado en DEV: email de recuperación → enlace de Supabase → callback a Pedilo → `/set-password` → contraseña nueva persistida → retorno al login. Reutilizar la contraseña actual muestra “La nueva contraseña debe ser distinta de la contraseña actual.”
+El flujo externo real quedó validado en DEV: email de recuperación → enlace de Supabase → callback a Bag It → `/set-password` → contraseña nueva persistida → retorno al login. Reutilizar la contraseña actual muestra “La nueva contraseña debe ser distinta de la contraseña actual.”
 
 ### `DEPENDENCY_SECURITY_AUDIT_RECORDED`
 
@@ -103,7 +103,7 @@ solicitud pública
 → OWNER configura comercio
 → readiness completo
 → activación ADMIN
-→ ACTIVE visible en Pedilo
+→ ACTIVE visible en Bag It
 ```
 
 El E2E automatizado DEV valida el producto completo usando un OWNER temporal ya confirmado; la entrega real de email se revalida manualmente cuando cambia Auth/SMTP/template.
@@ -130,7 +130,7 @@ Logger central `src/lib/operational-log.ts` con allowlist. Eventos P0 de place, 
 
 ### `PRE_PILOT_SAFE_ERROR_BOUNDARIES_IMPLEMENTED`
 
-`src/app/error.tsx`, `global-error.tsx` y `not-found.tsx` muestran copy Pedilo y un retorno a `/`. No renderizan `error.message`, stack ni digest. `global-error` reemplaza el root layout y no importa Auth, DB ni Supabase. Los fallos de render del cliente todavía no tienen captura remota.
+`src/app/error.tsx`, `global-error.tsx` y `not-found.tsx` muestran copy Bag It y un retorno a `/`. No renderizan `error.message`, stack ni digest. `global-error` reemplaza el root layout y no importa Auth, DB ni Supabase. Los fallos de render del cliente todavía no tienen captura remota.
 
 ### `PRE_PILOT_LIVENESS_HEALTH_IMPLEMENTED`
 
@@ -138,7 +138,11 @@ Logger central `src/lib/operational-log.ts` con allowlist. Eventos P0 de place, 
 
 ### `PRE_PILOT_ENVIRONMENT_GUARD_IMPLEMENTED`
 
-`src/config/runtime-environment.ts` rechaza mezclas claras de DEV y PROD. Solo `MARKETPLACE_ENV` selecciona el entorno. Un proceso que ya sirve con `NODE_ENV=production` no puede arrancar si esa variable falta; `next build` queda exceptuado. No prueba que las keys y `DATABASE_URL` sean del mismo proyecto. Crear el proyecto Supabase PROD y cargar su ref sigue pendiente.
+`src/config/runtime-environment.ts` rechaza mezclas claras de DEV y PROD. Solo `MARKETPLACE_ENV` selecciona el entorno. Un proceso que ya sirve con `NODE_ENV=production` no puede arrancar si esa variable falta; `next build` queda exceptuado. Supabase PROD ya está creado y conectado; el guard no prueba por sí solo que todas las keys y `DATABASE_URL` pertenezcan al mismo proyecto.
+
+### `PRE_PILOT_SENTRY_OBSERVABILITY_IMPLEMENTED`
+
+Sentry está integrado en servidor, edge y cliente, con configuración de producción y error boundaries instrumentados. La recepción real de un error controlado debe revalidarse antes de abrir el piloto.
 
 ### `PRE_PILOT_OPERATIONS_BASELINE_IN_PROGRESS`
 
@@ -150,11 +154,13 @@ Hecho en esta baseline documental:
 - recuperación de contraseña E2E DEV ya validada;
 - auditoría de dependencias registrada.
 
-Sigue pendiente de implementación o de operación externa:
+Estado externo actual:
 
-- proyecto Supabase PROD, dominio, HTTPS y secrets de hosting;
-- backup inicial y ensayo de restore en proyecto descartable;
-- QA en Android, iPhone y viewport pequeño.
+- Supabase PROD separado y Netlify productivo con HTTPS: completados;
+- Sentry remoto para servidor, edge y cliente: implementado;
+- dominio propio, Google OAuth y configuración final de marca: pendientes;
+- backup inicial y ensayo de restore en proyecto descartable: pendientes;
+- QA en Android, iPhone y viewport pequeño: pendiente.
 
 ### `PRE_PILOT_POLISH_IN_PROGRESS`
 

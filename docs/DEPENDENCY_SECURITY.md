@@ -1,8 +1,8 @@
-# Dependency security — Pedilo
+# Dependency security — Bag It
 
 ## Auditoría pre-piloto 2026-09-04
 
-Se ejecutó `npm audit --json` sobre el lockfile actual de Pedilo con Node.js 22 / npm 10 en GitHub Actions.
+Se ejecutó `npm audit --json` sobre el lockfile actual de Bag It con Node.js 22 / npm 10 en GitHub Actions.
 
 Resultado:
 
@@ -22,7 +22,7 @@ drizzle-kit (devDependency)
 
 El advisory involucrado es `GHSA-67mh-4wv8-2f99`: versiones antiguas de esbuild permiten que otros sitios web interactúen con su servidor de desarrollo por una configuración CORS demasiado permisiva.
 
-`@esbuild-kit/esm-loader` y `@esbuild-kit/core-utils` son dependencias transitivas de `drizzle-kit`. Pedilo no las declara como dependencias de runtime ni las necesita para servir la aplicación en producción.
+`@esbuild-kit/esm-loader` y `@esbuild-kit/core-utils` son dependencias transitivas de `drizzle-kit`. Bag It no las declara como dependencias de runtime ni las necesita para servir la aplicación en producción.
 
 ## Decisión actual
 

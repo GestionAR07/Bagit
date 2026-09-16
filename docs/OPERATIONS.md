@@ -1,4 +1,4 @@
-# Pedilo Operations Runbook
+# Bag It Operations Runbook
 
 ## 1. Propósito
 
@@ -51,19 +51,19 @@ Nunca copiar secretos al repo. `.env.local` es solo la máquina de quien desarro
 
 Nombres reales usados por este repo. En el dashboard de Supabase la publishable key a veces se llama “anon”; la secret key, “service_role”. El código no lee `NEXT_PUBLIC_SUPABASE_ANON_KEY` ni `SUPABASE_SERVICE_ROLE_KEY`.
 
-| Variable                               | Dónde vive  | Rol                                                                                                                              |
-| -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                         | SERVER ONLY | Postgres para Drizzle (`getDb`) y `db:migrate`.                                                                                  |
-| `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                              |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                             |
-| `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                       |
-| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-pedilo>`. |
-| `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                        |
-| `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.            |
-| `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                              |
-| `MARKETPLACE_PROD_PROJECT_REF`         | SERVER ONLY | Ref esperado de PROD. No es secreto. Obligatorio solo si `MARKETPLACE_ENV=production`.                                           |
-| `E2E_ALLOW_WRITES`                     | LOCAL ONLY  | Debe ser `I_ACCEPT_E2E_DEV_WRITES` y solo en la shell del operador. No en CI ni en hosting PROD.                                 |
-| `E2E_MODE`                             | LOCAL ONLY  | `WRITE_DEV` lo setea `npm run e2e:dev`. CI usa READ_ONLY.                                                                        |
+| Variable                               | Dónde vive  | Rol                                                                                                                             |
+| -------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                         | SERVER ONLY | Postgres para Drizzle (`getDb`) y `db:migrate`.                                                                                 |
+| `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                             |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                            |
+| `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                      |
+| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`. |
+| `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                       |
+| `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.           |
+| `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                             |
+| `MARKETPLACE_PROD_PROJECT_REF`         | SERVER ONLY | Ref esperado de PROD. No es secreto. Obligatorio solo si `MARKETPLACE_ENV=production`.                                          |
+| `E2E_ALLOW_WRITES`                     | LOCAL ONLY  | Debe ser `I_ACCEPT_E2E_DEV_WRITES` y solo en la shell del operador. No en CI ni en hosting PROD.                                |
+| `E2E_MODE`                             | LOCAL ONLY  | `WRITE_DEV` lo setea `npm run e2e:dev`. CI usa READ_ONLY.                                                                       |
 
 `NODE_ENV` y `VERCEL_ENV` los setea el runtime/host. Si alguno es `production`, los scripts de escritura contra DEV abortan. No los uses para “marcar” un `.env.local` de desarrollo, ni para elegir el proyecto Supabase. `next build` y CI usan `NODE_ENV=production` y no por eso aplican las reglas PROD.
 
@@ -77,17 +77,17 @@ No detecta: que la publishable key, la secret key y `DATABASE_URL` pertenezcan a
 
 ## 4. Preflight antes de iniciar producción
 
-Checklist manual. Dominio aún no fijado: usar `https://<dominio-pedilo>`.
+Checklist manual. Dominio aún no fijado: usar `https://<dominio-bagit>`.
 
-- [ ] Proyecto Supabase PROD creado (distinto de DEV)
+- [x] Proyecto Supabase PROD creado (distinto de DEV)
 - [ ] Postgres separado
 - [ ] Auth separado
 - [ ] Storage separado
 - [ ] Variables PROD cargadas solo en hosting (no en Git, no en `.env.local` de desarrollo)
-- [ ] `APP_BASE_URL` apunta a `https://<dominio-pedilo>`
+- [ ] `APP_BASE_URL` apunta a `https://<dominio-bagit>`
 - [ ] HTTPS activo
-- [ ] Supabase Site URL = `https://<dominio-pedilo>`
-- [ ] Redirect URLs incluyen `https://<dominio-pedilo>/auth/confirm` (y el origen de la app)
+- [ ] Supabase Site URL = `https://<dominio-bagit>`
+- [ ] Redirect URLs incluyen `https://<dominio-bagit>/auth/confirm` (y el origen de la app)
 - [ ] Google OAuth configurado para el proyecto PROD (origen de producción; redirect del callback de _ese_ Supabase)
 - [ ] Recovery configurado para PROD (plantilla + redirect a `/auth/confirm`)
 - [ ] Invite configurado para PROD (misma ruta `/auth/confirm`)
@@ -130,7 +130,7 @@ Hacer backup **antes** del primer tráfico real y **antes** de cada `db:migrate`
 
 ### PostgreSQL
 
-Incluye el estado de negocio que Pedilo no puede reconstruir desde el código:
+Incluye el estado de negocio que Bag It no puede reconstruir desde el código:
 
 - merchants, categorías, productos, opciones, stock
 - orders, ítems, eventos, deliveries
@@ -190,18 +190,18 @@ No revierte migraciones. Si el release nuevo ya aplicó SQL, el código viejo pu
 
 Solo con procedimiento explícito y backup identificado.
 
-Las migraciones de Pedilo no se asumen reversibles. No escribir ni ejecutar SQL inverso improvisado sobre producción.
+Las migraciones de Bag It no se asumen reversibles. No escribir ni ejecutar SQL inverso improvisado sobre producción.
 
 Si el schema o los datos de negocio quedaron mal, restaurar el backup de la sección 7 en un proyecto de recuperación, verificar, y recién después cortar el tráfico. No “desmigrar” en vivo.
 
 ## 9. Auth / OAuth / Recovery
 
-Al pasar de localhost a `https://<dominio-pedilo>` hay que cambiar configuración externa. El código ya arma redirects con `APP_BASE_URL`.
+Al pasar de localhost a `https://<dominio-bagit>` hay que cambiar configuración externa. El código ya arma redirects con `APP_BASE_URL`.
 
 Rutas que deben estar en la allow-list de **ese** proyecto Supabase:
 
-- `https://<dominio-pedilo>/auth/confirm` — confirmación de email, invite, recovery y callback PKCE de Google
-- Site URL = `https://<dominio-pedilo>`
+- `https://<dominio-bagit>/auth/confirm` — confirmación de email, invite, recovery y callback PKCE de Google
+- Site URL = `https://<dominio-bagit>`
 
 Flujos que dependen de eso:
 
@@ -212,7 +212,7 @@ Flujos que dependen de eso:
 
 Google (consola del cliente OAuth de producción, no la de DEV):
 
-- origen JavaScript: `https://<dominio-pedilo>`
+- origen JavaScript: `https://<dominio-bagit>`
 - redirect URI: el callback que muestra Supabase PROD (`https://<project-ref-prod>.supabase.co/auth/v1/callback`), no el de DEV
 
 No pegar Client ID, Client Secret ni service keys en Git ni en este documento.
@@ -261,7 +261,7 @@ Canal humano: una persona de guardia con acceso al hosting y al dashboard de **P
 
 ## 11. Logs operativos
 
-Baseline mínima en `src/lib/operational-log.ts`. Escribe JSON a la salida estándar del servidor. No hay archivo de log, tabla ni proveedor externo (no Sentry).
+El baseline local en `src/lib/operational-log.ts` escribe JSON seguro a la salida estándar. Sentry complementa este registro con captura remota en servidor, edge y cliente; debe comprobarse la recepción real de un error controlado antes del piloto.
 
 Eventos conectados:
 
@@ -276,7 +276,7 @@ Prohibido en logs: passwords, tokens, cookies, Authorization, service role, keys
 
 Si el logger falla al serializar, no debe romper el pedido. Storage upload e Auth invite todavía no emiten eventos.
 
-Los fallos de render usan `src/app/error.tsx`, `global-error.tsx` y `not-found.tsx`. Esas pantallas no muestran `error.message`, stack ni digest, y no envían el objeto Error al logger. La captura remota de errores de cliente (Sentry u otro proveedor) sigue fuera de alcance.
+Los fallos de render usan `src/app/error.tsx`, `global-error.tsx` y `not-found.tsx`. Esas pantallas no muestran `error.message`, stack ni digest. La instrumentación de Sentry captura errores remotos sin exponer detalles técnicos al usuario.
 
 `GET /api/health` es solo liveness: HTTP 200 y `{"status":"ok"}` si el proceso Next responde. No prueba PostgreSQL, Auth ni Storage. No escribe logs. Un chequeo de readiness queda para más adelante, cuando un balanceador lo necesite de verdad.
 
@@ -294,7 +294,7 @@ No iniciar con comercios reales si falta un ítem de INFRA o AUTH. OPERATIONS ma
 
 ### INFRA
 
-- [ ] Supabase PROD separado
+- [x] Supabase PROD separado
 - [ ] dominio + HTTPS
 - [ ] secrets PROD solo en hosting
 - [ ] migrations aplicadas al proyecto correcto
@@ -328,7 +328,7 @@ No iniciar con comercios reales si falta un ítem de INFRA o AUTH. OPERATIONS ma
 
 ### OPERATIONS
 
-- [x] logs mínimos de fallos de pedido (baseline; sin proveedor externo)
+- [x] logs operativos mínimos y captura remota con Sentry
 - [x] error boundaries propios (sin captura remota de render)
 - [ ] backup
 - [ ] restore ensayado en proyecto descartable

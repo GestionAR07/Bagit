@@ -1,8 +1,8 @@
-# Roadmap — Pedilo
+# Roadmap — Bag It
 
 ## Estado general
 
-Pedilo ya superó la etapa de MVP técnico y se encuentra en **pre-piloto**. Los flujos principales de comprador, comercio y administración están implementados y cuentan con cobertura automatizada, incluida una batería WRITE_DEV controlada contra el entorno de desarrollo.
+Bag It ya superó la etapa de MVP técnico y se encuentra en **pre-piloto**. Los flujos principales de comprador, comercio y administración están implementados y cuentan con cobertura automatizada, incluida una batería WRITE_DEV controlada contra el entorno de desarrollo.
 
 ## Fases
 
@@ -33,7 +33,7 @@ Pedilo ya superó la etapa de MVP técnico y se encuentra en **pre-piloto**. Los
    - categorías de marketplace.
    - búsqueda/descubrimiento de comercios.
    - storefront de comercio con disponibilidad real.
-   - experiencia responsive y visual Pedilo.
+   - experiencia responsive y visual Bag It.
 
 6. **Comprador: carrito + checkout + cuenta — completada**
    - carrito persistente.
@@ -67,11 +67,17 @@ Pedilo ya superó la etapa de MVP técnico y se encuentra en **pre-piloto**. Los
    - liveness `GET /api/health` (proceso vivo; no es readiness de Postgres/Auth/Storage).
    - guard de entorno (`MARKETPLACE_ENV=production`; no usa `NODE_ENV` como señal).
 
+   Completado adicional en producción:
+   - observabilidad remota con Sentry para servidor, edge y cliente.
+   - proyecto Supabase PROD separado, datos de referencia y secrets de producción.
+   - despliegue Netlify productivo con HTTPS en `bagitar.netlify.app`.
+
    Pendiente real antes del piloto:
-   - observabilidad central/remota (agregación/retención de logs y captura remota de errores de render; sin proveedor externo todavía).
-   - entorno de producción separado (Supabase PROD, dominio, HTTPS, secrets).
-   - backup, restore ensayado y cutover: ver [`OPERATIONS.md`](./OPERATIONS.md).
+   - dominio propio `.ar` y configuración externa de Google OAuth.
+   - backup inicial y restore ensayado: ver [`OPERATIONS.md`](./OPERATIONS.md).
    - QA responsive en Android, iPhone y viewport pequeño.
+   - alta y operación del primer comercio real en producción.
+   - términos, privacidad y canal operativo de soporte.
    - pulido de warnings, fallbacks públicos y accesibilidad: en curso.
 
 9. **Piloto Rawson + Playa Unión — siguiente hito**
@@ -113,7 +119,7 @@ No se requiere “cero bugs” para comenzar un piloto controlado, pero sí:
 - experiencia móvil suficientemente estable;
 - entorno productivo separado de DEV;
 - backup inicial, procedimiento de restore y cutover documentados en [`OPERATIONS.md`](./OPERATIONS.md);
-- logs mínimos, error boundaries, liveness health y guard DEV/PROD ya implementados; readiness de base y el proyecto Supabase PROD siguen fuera de alcance;
+- logs mínimos, error boundaries, liveness health y guard DEV/PROD ya implementados; readiness profunda de PostgreSQL, Auth y Storage sigue fuera de alcance;
 - canal operativo para resolver incidentes del comercio piloto.
 
 Las funcionalidades posteriores no deben bloquear el piloto si no comprometen seguridad, dinero, pedidos, stock o capacidad de recuperación.
