@@ -35,12 +35,12 @@ describe("owner merchant publication", () => {
   it("requires OWNER authorization for the merchant", async () => {
     const deps = baseDeps({
       requireMerchantOwner: vi.fn(async () => {
-        throw new AuthzError("ROLE_DENIED", "forbidden");
+        throw new AuthzError("MERCHANT_ROLE_FORBIDDEN", "forbidden");
       }),
     });
 
     await expect(publishMerchant("merchant-1", deps)).rejects.toMatchObject({
-      code: "ROLE_DENIED",
+      code: "MERCHANT_ROLE_FORBIDDEN",
     });
     expect(deps.findActivationReadiness).not.toHaveBeenCalled();
     expect(deps.activateDraftMerchant).not.toHaveBeenCalled();
