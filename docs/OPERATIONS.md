@@ -51,19 +51,19 @@ Nunca copiar secretos al repo. `.env.local` es solo la máquina de quien desarro
 
 Nombres reales usados por este repo. En el dashboard de Supabase la publishable key a veces se llama “anon”; la secret key, “service_role”. El código no lee `NEXT_PUBLIC_SUPABASE_ANON_KEY` ni `SUPABASE_SERVICE_ROLE_KEY`.
 
-| Variable                               | Dónde vive  | Rol                                                                                                                              |
-| -------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `DATABASE_URL`                         | SERVER ONLY | Postgres para Drizzle (`getDb`) y `db:migrate`.                                                                                  |
-| `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                              |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                             |
-| `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                       |
-| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`.  |
-| `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                        |
-| `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.            |
-| `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                              |
-| `MARKETPLACE_PROD_PROJECT_REF`         | SERVER ONLY | Ref esperado de PROD. No es secreto. Obligatorio solo si `MARKETPLACE_ENV=production`.                                           |
-| `E2E_ALLOW_WRITES`                     | LOCAL ONLY  | Debe ser `I_ACCEPT_E2E_DEV_WRITES` y solo en la shell del operador. No en CI ni en hosting PROD.                                 |
-| `E2E_MODE`                             | LOCAL ONLY  | `WRITE_DEV` lo setea `npm run e2e:dev`. CI usa READ_ONLY.                                                                        |
+| Variable                               | Dónde vive  | Rol                                                                                                                             |
+| -------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                         | SERVER ONLY | Postgres para Drizzle (`getDb`) y `db:migrate`.                                                                                 |
+| `NEXT_PUBLIC_SUPABASE_URL`             | CLIENT SAFE | URL del proyecto. Viaja al browser.                                                                                             |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | CLIENT SAFE | Key pública (anon/publishable). Nunca la secret key.                                                                            |
+| `SUPABASE_SECRET_KEY`                  | SERVER ONLY | Auth Admin (invites, lookup). Prohibido `NEXT_PUBLIC_SUPABASE_SECRET_KEY`.                                                      |
+| `APP_BASE_URL`                         | SERVER ONLY | Origen público de Next. Invites, recovery y OAuth. Ejemplo local `http://localhost:3001`. Producción `https://<dominio-bagit>`. |
+| `NEXT_PUBLIC_GOOGLE_AUTH_ENABLED`      | CLIENT SAFE | `true` solo después de configurar Google en ese proyecto.                                                                       |
+| `MARKETPLACE_ENV`                      | SERVER ONLY | Selecciona DEV/test/PROD. Obligatoria en un runtime que ya sirve con `NODE_ENV=production`. No la infiere `NODE_ENV`.           |
+| `MARKETPLACE_DEV_PROJECT_REF`          | SERVER ONLY | Ref exacto del proyecto DEV. Harnesses y guard. Nunca el ref de PROD. Nunca en Git.                                             |
+| `MARKETPLACE_PROD_PROJECT_REF`         | SERVER ONLY | Ref esperado de PROD. No es secreto. Obligatorio solo si `MARKETPLACE_ENV=production`.                                          |
+| `E2E_ALLOW_WRITES`                     | LOCAL ONLY  | Debe ser `I_ACCEPT_E2E_DEV_WRITES` y solo en la shell del operador. No en CI ni en hosting PROD.                                |
+| `E2E_MODE`                             | LOCAL ONLY  | `WRITE_DEV` lo setea `npm run e2e:dev`. CI usa READ_ONLY.                                                                       |
 
 `NODE_ENV` y `VERCEL_ENV` los setea el runtime/host. Si alguno es `production`, los scripts de escritura contra DEV abortan. No los uses para “marcar” un `.env.local` de desarrollo, ni para elegir el proyecto Supabase. `next build` y CI usan `NODE_ENV=production` y no por eso aplican las reglas PROD.
 
