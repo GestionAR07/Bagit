@@ -4,7 +4,11 @@ import { PublicBrandWordmark } from "@/components/storefront/public-brand-wordma
 export default function AccessDeniedPage() {
   return (
     <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-10 sm:px-6">
-      <Link href="/" className="mb-8 w-fit" aria-label="Volver al inicio de Bag It">
+      <Link
+        href="/"
+        className="mb-8 w-fit"
+        aria-label="Volver al inicio de Bag It"
+      >
         <PublicBrandWordmark size="header" tone="plain" />
       </Link>
 
