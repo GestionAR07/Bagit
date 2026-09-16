@@ -59,3 +59,6 @@ yarn-error.log*
 *~
 .DS_Store
 Desktop.ini
+
+# local database backups — may contain production data
+/backups/
