@@ -1,12 +1,12 @@
 /**
- * Production / remote-target guard for Pedilo E2E.
+ * Production / remote-target guard for Bag It E2E.
  *
  * Default: only loopback (127.0.0.1 / localhost / ::1).
  * Remote DEV requires BOTH:
  *   E2E_ALLOW_REMOTE_DEV=I_ACCEPT_REMOTE_DEV
  *   E2E_REMOTE_DEV_HOST=<exact hostname>
- * Production (pedilo.store and subdomains, including trailing-dot FQDNs)
- * is never allowed, even with those flags.
+ * Known production hosts and their subdomains (including trailing-dot FQDNs)
+ * are never allowed, even with those flags.
  */
 
 export const E2E_DEFAULT_ORIGIN = "http://127.0.0.1:3100";
@@ -15,7 +15,19 @@ export const E2E_REMOTE_DEV_SENTINEL = "I_ACCEPT_REMOTE_DEV";
 
 export type E2eGuardEnv = Readonly<Record<string, string | undefined>>;
 
-const PRODUCTION_APEX = "pedilo.store";
+const PRODUCTION_APEXES = [
+  "pedilo.store",
+  "bagitar.netlify.app",
+  "bagit.ar",
+  "bagit.com.ar",
+] as const;
+
+const NETLIFY_PRODUCTION_SUFFIXES = ["--bagitar.netlify.app"] as const;
+
+const PRODUCTION_HOST_LABEL = [
+  ...PRODUCTION_APEXES,
+  `*${NETLIFY_PRODUCTION_SUFFIXES[0]}`,
+].join(", ");
 
 export function normalizeHostname(hostname: string): string {
   let host = hostname
@@ -38,10 +50,13 @@ export function isBlockedProductionHost(hostname: string): boolean {
   if (!host) {
     return false;
   }
-  if (host === PRODUCTION_APEX || host === `www.${PRODUCTION_APEX}`) {
-    return true;
-  }
-  return host.endsWith(`.${PRODUCTION_APEX}`);
+  const matchesApex = PRODUCTION_APEXES.some(
+    (apex) => host === apex || host.endsWith(`.${apex}`),
+  );
+  const matchesNetlifyDeploy = NETLIFY_PRODUCTION_SUFFIXES.some((suffix) =>
+    host.endsWith(suffix),
+  );
+  return matchesApex || matchesNetlifyDeploy;
 }
 
 function assertRemoteDevAuthorized(hostname: string, env: E2eGuardEnv): void {
@@ -50,19 +65,19 @@ function assertRemoteDevAuthorized(hostname: string, env: E2eGuardEnv): void {
 
   if (!sentinelOk) {
     throw new Error(
-      `E2E production guard: ${hostname} is not loopback. Default E2E only accepts localhost / 127.0.0.1. A remote DEV environment requires E2E_ALLOW_REMOTE_DEV=${E2E_REMOTE_DEV_SENTINEL} AND E2E_REMOTE_DEV_HOST=<exact hostname>. Production (pedilo.store) is never allowed.`,
+      `E2E production guard: ${hostname} is not loopback. Default E2E only accepts localhost / 127.0.0.1. A remote DEV environment requires E2E_ALLOW_REMOTE_DEV=${E2E_REMOTE_DEV_SENTINEL} AND E2E_REMOTE_DEV_HOST=<exact hostname>. Known production hosts (${PRODUCTION_HOST_LABEL}) are never allowed.`,
     );
   }
 
   if (!allowedHost) {
     throw new Error(
-      `E2E production guard: E2E_ALLOW_REMOTE_DEV is set but E2E_REMOTE_DEV_HOST is missing. The sentinel alone does not authorize any remote host. Set E2E_REMOTE_DEV_HOST to the exact DEV hostname. Production (pedilo.store) is never allowed.`,
+      `E2E production guard: E2E_ALLOW_REMOTE_DEV is set but E2E_REMOTE_DEV_HOST is missing. The sentinel alone does not authorize any remote host. Set E2E_REMOTE_DEV_HOST to the exact DEV hostname. Known production hosts (${PRODUCTION_HOST_LABEL}) are never allowed.`,
     );
   }
 
   if (isBlockedProductionHost(allowedHost)) {
     throw new Error(
-      `E2E production guard: E2E_REMOTE_DEV_HOST=${allowedHost} is production. pedilo.store is never allowed.`,
+      `E2E production guard: E2E_REMOTE_DEV_HOST=${allowedHost} is production. Known production hosts (${PRODUCTION_HOST_LABEL}) are never allowed.`,
     );
   }
 
@@ -103,7 +118,7 @@ export function assertSafeE2eTarget(
 
   if (isBlockedProductionHost(hostname)) {
     throw new Error(
-      `E2E production guard: refusing to run against ${parsed.hostname}. Never use pedilo.store. Point E2E at a local instance (${E2E_DEFAULT_ORIGIN}).`,
+      `E2E production guard: refusing to run against ${parsed.hostname}. Known production hosts (${PRODUCTION_HOST_LABEL}) are never allowed. Point E2E at a local instance (${E2E_DEFAULT_ORIGIN}).`,
     );
   }
 

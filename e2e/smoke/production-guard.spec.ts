@@ -25,7 +25,7 @@ function read(rel: string): string {
 
 const authorizedRemote = {
   E2E_ALLOW_REMOTE_DEV: E2E_REMOTE_DEV_SENTINEL,
-  E2E_REMOTE_DEV_HOST: "pedilo-dev.example.com",
+  E2E_REMOTE_DEV_HOST: "bagit-dev.example.com",
 };
 
 test.describe("production guard (fail-fast, no network writes)", () => {
@@ -90,6 +90,43 @@ test.describe("production guard (fail-fast, no network writes)", () => {
     ).toThrow(/production|pedilo\.store/);
   });
 
+  test("rejects current and reserved Bag It production hosts even with remote-dev authorization", () => {
+    const productionHosts = [
+      "bagitar.netlify.app",
+      "main--bagitar.netlify.app",
+      "bagit.ar",
+      "www.bagit.ar",
+      "auth.bagit.ar",
+      "bagit.com.ar",
+      "www.bagit.com.ar",
+    ];
+
+    for (const hostname of productionHosts) {
+      const flags = {
+        E2E_ALLOW_REMOTE_DEV: E2E_REMOTE_DEV_SENTINEL,
+        E2E_REMOTE_DEV_HOST: hostname,
+      };
+      expect(isBlockedProductionHost(hostname)).toBe(true);
+      expect(() => assertSafeE2eTarget(`https://${hostname}`, flags)).toThrow(
+        /production/,
+      );
+      expect(() =>
+        assertSafeE2eTarget(`https://${hostname}.`, {
+          ...flags,
+          E2E_REMOTE_DEV_HOST: `${hostname}.`,
+        }),
+      ).toThrow(/production/);
+    }
+  });
+
+  test("does not overblock deceptive production-like suffixes", () => {
+    expect(isBlockedProductionHost("notbagit.ar")).toBe(false);
+    expect(isBlockedProductionHost("bagit.ar.example.com")).toBe(false);
+    expect(isBlockedProductionHost("bagitar.netlify.app.example.com")).toBe(
+      false,
+    );
+  });
+
   test("rejects a remote host without authorization", () => {
     expect(() => assertSafeE2eTarget("https://staging.example.com")).toThrow(
       /E2E_ALLOW_REMOTE_DEV/,
@@ -106,10 +143,10 @@ test.describe("production guard (fail-fast, no network writes)", () => {
 
   test("allows only the exact authorized remote host", () => {
     const url = assertSafeE2eTarget(
-      "https://pedilo-dev.example.com",
+      "https://bagit-dev.example.com",
       authorizedRemote,
     );
-    expect(url.hostname).toBe("pedilo-dev.example.com");
+    expect(url.hostname).toBe("bagit-dev.example.com");
     expect(() =>
       assertSafeE2eTarget("https://other.example.com", authorizedRemote),
     ).toThrow(/does not match E2E_REMOTE_DEV_HOST/);
