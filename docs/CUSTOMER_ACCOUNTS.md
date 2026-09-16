@@ -24,7 +24,7 @@
 
 ## Configuración de Google OAuth
 
-La checklist de branding (nombre **Pedilo** en el consentimiento de Google,
+La checklist de branding (nombre **Bag It** en el consentimiento de Google,
 dominio custom de Auth en Supabase) y la política de reutilizar una cuenta
 existente está en [`GOOGLE_OAUTH.md`](./GOOGLE_OAUTH.md).
 
