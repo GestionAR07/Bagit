@@ -1,8 +1,10 @@
 import "server-only";
 
 import { and, eq } from "drizzle-orm";
-import { getDb } from "../client";
+import { getDb, type Db } from "../client";
 import { merchantUsers, userProfiles } from "../schema";
+
+export type MerchantUserDbTx = Parameters<Parameters<Db["transaction"]>[0]>[0];
 
 export type MerchantUserRecord = {
   id: string;
@@ -36,11 +38,14 @@ export async function findMerchantUser(
   return rows[0] ?? null;
 }
 
-export async function insertMerchantOwner(input: {
-  merchantId: string;
-  userId: string;
-}): Promise<MerchantUserRecord> {
-  const db = getDb();
+export async function insertMerchantOwner(
+  input: {
+    merchantId: string;
+    userId: string;
+  },
+  tx?: MerchantUserDbTx,
+): Promise<MerchantUserRecord> {
+  const db = tx ?? getDb();
   const rows = await db
     .insert(merchantUsers)
     .values({
