@@ -61,14 +61,12 @@ function approveDeps(): ApproveMerchantApplicationDeps {
     markApproved,
     findRegisteredUserByEmail: async (email) => {
       if (!hasSupabaseSecretKey()) {
-        return null;
+        throw new Error(
+          "SUPABASE_SECRET_KEY is required to verify the merchant applicant before approval",
+        );
       }
-      try {
-        const admin = createSupabaseAdminClient();
-        return await findAuthUserByEmail(admin, email);
-      } catch {
-        return null;
-      }
+      const admin = createSupabaseAdminClient();
+      return findAuthUserByEmail(admin, email);
     },
     ensureUserProfile,
     insertOwnerMembership: async (input, tx) => {

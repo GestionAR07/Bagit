@@ -275,19 +275,31 @@ export default async function AdminMerchantDetailPage({ params }: PageProps) {
                 </div>
               )}
 
-              <div className="border-t border-slate-100 pt-5">
-                <h3 className="font-extrabold text-[#083f66]">
-                  {hasOwner
-                    ? "Invitar otro propietario"
-                    : "Invitar propietario"}
-                </h3>
-                <p className="mt-1 mb-4 text-sm text-slate-500">
-                  {hasOwner
-                    ? "Podés sumar otra cuenta con acceso de propietaria al comercio."
-                    : "Enviaremos una invitación para vincular una cuenta como propietaria del comercio."}
-                </p>
-                <InviteOwnerForm merchantId={merchant.id} />
-              </div>
+              {hasOwner ? (
+                <div className="border-t border-slate-100 pt-5">
+                  <div className="rounded-2xl bg-emerald-50 px-4 py-4 ring-1 ring-emerald-100 ring-inset">
+                    <p className="font-extrabold text-emerald-800">
+                      Propietario vinculado
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-emerald-700">
+                      El comercio ya tiene una cuenta propietaria activa. No
+                      hace falta enviar una invitación para completar el
+                      onboarding.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="border-t border-slate-100 pt-5">
+                  <h3 className="font-extrabold text-[#083f66]">
+                    Invitar propietario
+                  </h3>
+                  <p className="mt-1 mb-4 text-sm text-slate-500">
+                    Enviaremos una invitación para vincular una cuenta como
+                    propietaria del comercio.
+                  </p>
+                  <InviteOwnerForm merchantId={merchant.id} />
+                </div>
+              )}
             </div>
           </article>
         </div>
