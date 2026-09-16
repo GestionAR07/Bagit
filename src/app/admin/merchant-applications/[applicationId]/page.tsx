@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { normalizeSlug } from "@/lib/slug";
 import { loadAdminContext } from "../../_lib/load-admin";
 import { findMerchantApplicationById } from "@/infrastructure/db/repositories/merchant-application-repository";
 import { ApplicationApproveForm } from "../application-approve-form";
@@ -84,8 +83,8 @@ export default async function AdminMerchantApplicationDetailPage({
             </span>
           </div>
           <p className="mt-1.5 text-sm leading-6 text-slate-500">
-            Revisá los datos enviados por el comercio antes de resolver la
-            solicitud.
+            Revisá los datos enviados por el comercio antes de aprobar o
+            rechazar la solicitud.
           </p>
         </div>
       </header>
@@ -159,7 +158,7 @@ export default async function AdminMerchantApplicationDetailPage({
                 Datos de contacto
               </h2>
               <p className="mt-1 text-sm text-slate-500">
-                Persona indicada para continuar el proceso de incorporación.
+                Persona indicada como propietaria del comercio.
               </p>
             </div>
             <div className="grid gap-4 px-5 py-5 text-sm sm:grid-cols-3 sm:px-6">
@@ -197,7 +196,7 @@ export default async function AdminMerchantApplicationDetailPage({
               Resolución administrativa
             </h2>
             <p className="mt-1 text-sm leading-6 text-slate-500">
-              Definí el próximo paso de esta incorporación.
+              Tu intervención termina al aprobar o rechazar la incorporación.
             </p>
           </div>
 
@@ -208,14 +207,15 @@ export default async function AdminMerchantApplicationDetailPage({
                   Solicitud aprobada
                 </p>
                 <p className="mt-1 text-sm leading-6 text-emerald-700">
-                  El comercio fue creado y quedó vinculado a esta solicitud.
+                  El propietario quedó vinculado. La configuración y publicación
+                  del comercio quedan a cargo de su cuenta.
                 </p>
                 {application.merchantId ? (
                   <Link
                     href={`/admin/merchants/${application.merchantId}`}
-                    className="mt-3 inline-flex min-h-10 items-center justify-center rounded-xl bg-emerald-600 px-4 text-sm font-extrabold text-white transition hover:bg-emerald-700"
+                    className="mt-3 inline-flex min-h-10 items-center justify-center rounded-xl bg-white px-4 text-sm font-extrabold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100"
                   >
-                    Ver comercio
+                    Ver estado del comercio
                   </Link>
                 ) : null}
               </div>
@@ -242,13 +242,10 @@ export default async function AdminMerchantApplicationDetailPage({
                     Aprobar solicitud
                   </h3>
                   <p className="mt-1 mb-4 text-sm leading-6 text-slate-500">
-                    Se creará un comercio en borrador para continuar su
-                    configuración y onboarding.
+                    Al aprobar, se crea el comercio en borrador y se vincula
+                    automáticamente al solicitante como propietario.
                   </p>
-                  <ApplicationApproveForm
-                    applicationId={application.id}
-                    defaultSlug={normalizeSlug(application.businessName)}
-                  />
+                  <ApplicationApproveForm applicationId={application.id} />
                 </div>
 
                 <div className="border-t border-slate-100 pt-5">
