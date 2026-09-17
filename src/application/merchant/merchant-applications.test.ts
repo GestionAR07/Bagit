@@ -345,9 +345,7 @@ describe("approveMerchantApplication", () => {
     );
     expect(unconfirmedResult.ok).toBe(false);
     if (!unconfirmedResult.ok) {
-      expect(unconfirmedResult.error.code).toBe(
-        "APPLICANT_EMAIL_UNCONFIRMED",
-      );
+      expect(unconfirmedResult.error.code).toBe("APPLICANT_EMAIL_UNCONFIRMED");
     }
     expect(unconfirmed.runTransaction).not.toHaveBeenCalled();
   });
@@ -409,9 +407,7 @@ describe("approveMerchantApplication", () => {
     if (!result.ok) {
       expect(result.error.code).toBe("DUPLICATE_SLUG");
     }
-    expect(deps.findMerchantBySlug).toHaveBeenCalledWith(
-      "panadera-norte-app1",
-    );
+    expect(deps.findMerchantBySlug).toHaveBeenCalledWith("panadera-norte-app1");
     expect(deps.runTransaction).not.toHaveBeenCalled();
   });
 
