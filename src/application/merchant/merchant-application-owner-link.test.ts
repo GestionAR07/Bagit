@@ -36,17 +36,17 @@ function draftMerchant(): MerchantDetailRecord {
   return {
     id: "merchant-1",
     name: "Panadería Norte",
-    slug: "panaderia-norte",
+    slug: "panadera-norte-app1",
     description: "Pan artesanal",
     status: "DRAFT",
     cityId: CITY_ID,
     zoneId: ZONE_ID,
     cityName: "Rawson",
     zoneName: "Centro",
-    pickupEnabled: true,
+    pickupEnabled: false,
     merchantDeliveryEnabled: false,
     platformDeliveryEnabled: false,
-    preparationMinutes: 20,
+    preparationMinutes: 30,
     acceptingOrders: true,
     pausedUntil: null,
     cityTimezone: "America/Argentina/Buenos_Aires",
@@ -92,16 +92,10 @@ function deps(
   };
 }
 
-const input = {
-  applicationId: "app-1",
-  slug: "panaderia-norte",
-  pickupEnabled: true,
-  merchantDeliveryEnabled: false,
-  preparationMinutes: 20,
-};
+const input = { applicationId: "app-1" };
 
 describe("merchant application registered owner linking", () => {
-  it("links a confirmed existing account as OWNER during approval", async () => {
+  it("links the confirmed applicant as OWNER during approval", async () => {
     const sharedTx = { id: "shared-tx" };
     const insertOwnerMembership = vi.fn(async (_input, tx) => {
       expect(tx).toBe(sharedTx);
@@ -127,36 +121,38 @@ describe("merchant application registered owner linking", () => {
     );
   });
 
-  it("does not auto-link an existing account whose email is not confirmed", async () => {
-    const insertOwnerMembership = vi.fn(async () => undefined);
-    const ensureUserProfile = vi.fn(async () => undefined);
+  it("blocks approval when the registered email is not confirmed", async () => {
     const current = deps({
       findRegisteredUserByEmail: vi.fn(async () => ({
         id: "user-ana",
         emailConfirmed: false,
       })),
-      ensureUserProfile,
-      insertOwnerMembership,
     });
 
     const result = await approveMerchantApplication(input, current);
 
-    expect(result.ok).toBe(true);
-    expect(ensureUserProfile).not.toHaveBeenCalled();
-    expect(insertOwnerMembership).not.toHaveBeenCalled();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe("APPLICANT_EMAIL_UNCONFIRMED");
+    }
+    expect(current.ensureUserProfile).not.toHaveBeenCalled();
+    expect(current.runTransaction).not.toHaveBeenCalled();
+    expect(current.insertOwnerMembership).not.toHaveBeenCalled();
   });
 
-  it("keeps the existing manual-invite fallback when no account exists", async () => {
-    const insertOwnerMembership = vi.fn(async () => undefined);
+  it("blocks approval when the applicant has no registered account", async () => {
     const current = deps({
       findRegisteredUserByEmail: vi.fn(async () => null),
-      insertOwnerMembership,
     });
 
     const result = await approveMerchantApplication(input, current);
 
-    expect(result.ok).toBe(true);
-    expect(insertOwnerMembership).not.toHaveBeenCalled();
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe("APPLICANT_ACCOUNT_REQUIRED");
+    }
+    expect(current.runTransaction).not.toHaveBeenCalled();
+    expect(current.insertOwnerMembership).not.toHaveBeenCalled();
   });
 
   it("fails the approval if the atomic OWNER membership write fails", async () => {

@@ -74,6 +74,28 @@ describe("admin merchant applications UI (static)", () => {
     expect(rejectForm).not.toContain("reviewedByUserId");
   });
 
+  it("keeps operational configuration out of the approval form and action", () => {
+    const actions = read("src/app/admin/merchant-applications/actions.ts");
+    const approveForm = read(
+      "src/app/admin/merchant-applications/application-approve-form.tsx",
+    );
+    const normalizedApproveForm = approveForm.replace(/\s+/g, " ");
+
+    for (const field of [
+      "slug",
+      "pickupEnabled",
+      "merchantDeliveryEnabled",
+      "preparationMinutes",
+    ]) {
+      expect(actions).not.toContain(`formData.get(\"${field}\")`);
+      expect(approveForm).not.toContain(`name=\"${field}\"`);
+    }
+    expect(approveForm).toContain("Aprobar solicitud");
+    expect(normalizedApproveForm).toContain(
+      "La configuración del comercio se completa luego desde su propio panel.",
+    );
+  });
+
   it("does not accept reviewer id from form data", () => {
     const actions = read("src/app/admin/merchant-applications/actions.ts");
 
@@ -81,7 +103,7 @@ describe("admin merchant applications UI (static)", () => {
     expect(actions).not.toMatch(/formData\.get\(["']reviewer/i);
   });
 
-  it("exposes merchantId after approve success for admin navigation", () => {
+  it("returns to applications after an approval decision", () => {
     const actions = read("src/app/admin/merchant-applications/actions.ts");
     const approveForm = read(
       "src/app/admin/merchant-applications/application-approve-form.tsx",
@@ -92,7 +114,7 @@ describe("admin merchant applications UI (static)", () => {
     expect(actions).toContain("merchantId: result.value.merchant.id");
     expect(approveForm).toContain("state.merchantId");
     expect(approveForm).toContain(
-      "router.push(`/admin/merchants/${state.merchantId}`)",
+      'router.push("/admin/merchant-applications")',
     );
   });
 

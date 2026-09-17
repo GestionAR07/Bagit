@@ -37,17 +37,8 @@ export async function approveMerchantApplicationAction(
   formData: FormData,
 ): Promise<ApproveMerchantApplicationActionState> {
   try {
-    const preparationRaw = String(formData.get("preparationMinutes") ?? "30");
-    const preparationMinutes = Number.parseInt(preparationRaw, 10);
-
     const result = await approveMerchantApplicationApp({
       applicationId: String(formData.get("applicationId") ?? ""),
-      slug: String(formData.get("slug") ?? ""),
-      pickupEnabled: formData.get("pickupEnabled") === "on",
-      merchantDeliveryEnabled: formData.get("merchantDeliveryEnabled") === "on",
-      preparationMinutes: Number.isFinite(preparationMinutes)
-        ? preparationMinutes
-        : -1,
     });
 
     if (!result.ok) {

@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { publishMerchantApp } from "@/application/merchant/merchant-publication-wiring";
 import {
   pauseMerchantOrdersTemporarilyApp,
   pauseMerchantOrdersUntilManualResumeApp,
@@ -25,6 +26,33 @@ function mapFailure(error: unknown): MerchantOperationalActionState {
     return { error: "No tenés acceso a este comercio.", success: null };
   }
   return { error: "No se pudo completar la operación.", success: null };
+}
+
+export async function publishMerchantAction(
+  merchantId: string,
+  _prev: MerchantOperationalActionState,
+  _formData: FormData,
+): Promise<MerchantOperationalActionState> {
+  void _prev;
+  void _formData;
+
+  try {
+    const result = await publishMerchantApp(merchantId);
+    if (!result.ok) {
+      return { error: result.error.message, success: null };
+    }
+    revalidatePath(merchantPath(merchantId));
+    revalidatePath(`/comercios/${merchantId}`);
+    revalidatePath("/");
+    return {
+      error: null,
+      success: result.value.alreadyActive
+        ? "Tu comercio ya estaba publicado."
+        : "Tu comercio ya está publicado y puede aparecer en Bag It.",
+    };
+  } catch (error) {
+    return mapFailure(error);
+  }
 }
 
 export async function pauseMerchantOrdersTemporaryAction(

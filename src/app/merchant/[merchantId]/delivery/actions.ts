@@ -25,8 +25,15 @@ export async function saveMerchantDeliverySettingsAction(
       .getAll("zone_id")
       .map((value) => String(value))
       .filter((value) => value.length > 0);
+    const preparationRaw = String(
+      formData.get("preparation_minutes") ?? "",
+    ).trim();
+    const preparationMinutes =
+      preparationRaw === "" ? Number.NaN : Number(preparationRaw);
 
     const result = await saveMerchantDeliverySettingsApp(merchantId, {
+      pickupEnabled: formData.get("pickup_enabled") === "on",
+      preparationMinutes,
       merchantDeliveryEnabled:
         formData.get("merchant_delivery_enabled") === "on",
       zones: zoneIds.map((zoneId) => ({
@@ -47,7 +54,7 @@ export async function saveMerchantDeliverySettingsAction(
     revalidatePath(`/comercios/${merchantId}`);
     revalidatePath("/");
     revalidatePath("/checkout");
-    return { error: null, success: "Configuración de envíos actualizada." };
+    return { error: null, success: "Configuración operativa actualizada." };
   } catch (error) {
     return mapFailure(error);
   }

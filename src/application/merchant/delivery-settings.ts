@@ -12,6 +12,7 @@ export const DELIVERY_SETTINGS_ALLOWED_ROLES = ["OWNER", "STAFF"] as const;
 
 /** Application-level ceiling. DB only requires estimated_minutes >= 0. */
 export const MAX_DELIVERY_ESTIMATED_MINUTES = 1440;
+export const MAX_PREPARATION_MINUTES = 1440;
 
 export type ConfigurableCityZone = {
   id: string;
@@ -43,6 +44,7 @@ export type DeliveryZoneSettingView = {
 export type DeliverySettingsView = {
   merchantDeliveryEnabled: boolean;
   pickupEnabled: boolean;
+  preparationMinutes: number;
   cityName: string;
   zones: DeliveryZoneSettingView[];
 };
@@ -56,6 +58,8 @@ export type SaveDeliveryZoneInput = {
 };
 
 export type SaveMerchantDeliverySettingsInput = {
+  pickupEnabled?: boolean;
+  preparationMinutes?: number;
   merchantDeliveryEnabled: boolean;
   zones: readonly SaveDeliveryZoneInput[];
 };
@@ -65,6 +69,7 @@ export type MerchantDeliveryContext = {
   cityId: string;
   cityName: string;
   pickupEnabled: boolean;
+  preparationMinutes?: number;
   merchantDeliveryEnabled: boolean;
 };
 
@@ -76,6 +81,8 @@ export type DeliverySettingsWriteDeps = {
   saveDeliverySettings: (
     merchantId: string,
     input: {
+      pickupEnabled?: boolean;
+      preparationMinutes?: number;
       merchantDeliveryEnabled: boolean;
       zones: readonly {
         zoneId: string;
@@ -113,6 +120,7 @@ export function presentDeliverySettings(input: {
   return {
     merchantDeliveryEnabled: input.merchant.merchantDeliveryEnabled,
     pickupEnabled: input.merchant.pickupEnabled,
+    preparationMinutes: input.merchant.preparationMinutes ?? 30,
     cityName: input.merchant.cityName,
     zones,
   };
@@ -240,6 +248,18 @@ export async function saveMerchantDeliverySettings(
     return err({ code: "INVALID_MERCHANT", message: "Comercio inválido." });
   }
 
+  if (
+    input.preparationMinutes !== undefined &&
+    (!Number.isInteger(input.preparationMinutes) ||
+      input.preparationMinutes < 0 ||
+      input.preparationMinutes > MAX_PREPARATION_MINUTES)
+  ) {
+    return err({
+      code: "INVALID_PREPARATION",
+      message: "El tiempo de preparación no es válido.",
+    });
+  }
+
   const [cityZones, existingRows] = await Promise.all([
     deps.listZonesForCity(merchant.cityId),
     deps.listDeliveryZones(merchantId),
@@ -300,8 +320,18 @@ export async function saveMerchantDeliverySettings(
     });
   }
 
+  const nextPickupEnabled = input.pickupEnabled ?? merchant.pickupEnabled;
+  const nextPreparationMinutes =
+    input.preparationMinutes ?? merchant.preparationMinutes ?? 30;
+
   try {
     const savedRows = await deps.saveDeliverySettings(merchantId, {
+      ...(input.pickupEnabled === undefined
+        ? {}
+        : { pickupEnabled: Boolean(input.pickupEnabled) }),
+      ...(input.preparationMinutes === undefined
+        ? {}
+        : { preparationMinutes: input.preparationMinutes }),
       merchantDeliveryEnabled: Boolean(input.merchantDeliveryEnabled),
       zones: zonesToPersist,
     });
@@ -309,6 +339,8 @@ export async function saveMerchantDeliverySettings(
       presentDeliverySettings({
         merchant: {
           ...merchant,
+          pickupEnabled: nextPickupEnabled,
+          preparationMinutes: nextPreparationMinutes,
           merchantDeliveryEnabled: Boolean(input.merchantDeliveryEnabled),
         },
         cityZones,

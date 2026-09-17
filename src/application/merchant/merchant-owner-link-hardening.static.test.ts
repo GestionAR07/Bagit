@@ -21,16 +21,17 @@ describe("merchant owner linking hardening", () => {
     expect(wiring).not.toMatch(/catch\s*\{\s*return null;?\s*\}/);
   });
 
-  it("does not offer another owner invite after an OWNER is already linked", () => {
+  it("keeps operational onboarding out of the admin merchant detail", () => {
     const detail = read("src/app/admin/merchants/[merchantId]/page.tsx");
-    const normalizedDetail = detail.replace(/\s+/g, " ");
 
-    expect(detail).toContain("{hasOwner ? (");
-    expect(detail).toContain("Propietario vinculado");
-    expect(normalizedDetail).toContain(
-      "El comercio ya tiene una cuenta propietaria activa. No hace falta enviar una invitación para completar el onboarding.",
+    expect(detail).toContain("Gestión a cargo del propietario");
+    expect(detail).toContain(
+      "Medios de pago, catálogo, retiro, delivery y publicación se",
     );
-    expect(detail).not.toContain("Invitar otro propietario");
-    expect(detail).toContain("<InviteOwnerForm merchantId={merchant.id} />");
+    expect(detail).not.toContain("ActivateMerchantForm");
+    expect(detail).not.toContain("InviteOwnerForm");
+    expect(detail).not.toContain("findMerchantActivationReadiness");
+    expect(detail).not.toContain("Preparación para operar");
+    expect(detail).not.toContain("Activar comercio");
   });
 });

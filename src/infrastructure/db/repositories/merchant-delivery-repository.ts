@@ -62,13 +62,15 @@ export async function listMerchantDeliveryZones(
 }
 
 /**
- * Updates merchant_delivery_enabled and upserts zone rows in one transaction.
- * UNIQUE(merchant_id, zone_id) prevents duplicates. Inactive rows keep fee,
- * minimum and ETA. Does not touch platform_delivery_enabled or pickup.
+ * Updates owner-controlled fulfillment settings and upserts zone rows in one
+ * transaction. UNIQUE(merchant_id, zone_id) prevents duplicates. Inactive rows
+ * keep fee, minimum and ETA. Does not touch platform_delivery_enabled.
  */
 export async function saveMerchantDeliverySettings(
   merchantId: string,
   input: {
+    pickupEnabled?: boolean;
+    preparationMinutes?: number;
     merchantDeliveryEnabled: boolean;
     zones: readonly UpsertMerchantDeliveryZoneInput[];
   },
@@ -78,6 +80,12 @@ export async function saveMerchantDeliverySettings(
     await tx
       .update(merchants)
       .set({
+        ...(input.pickupEnabled === undefined
+          ? {}
+          : { pickupEnabled: input.pickupEnabled }),
+        ...(input.preparationMinutes === undefined
+          ? {}
+          : { preparationMinutes: input.preparationMinutes }),
         merchantDeliveryEnabled: input.merchantDeliveryEnabled,
         updatedAt: new Date(),
       })
