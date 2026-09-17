@@ -156,7 +156,7 @@ export default async function MerchantDetailPage({ params }: PageProps) {
   const accepting = operationalStatus === "ACCEPTING";
 
   return (
-    <main className="merchant-ops-dashboard flex min-w-0 flex-1 flex-col">
+    <main className="merchant-ops-dashboard merchant-workspace-page merchant-workspace-orders flex min-w-0 flex-1 flex-col">
       <MerchantInboxRealtime merchantId={merchantId} />
 
       <header className="merchant-ops-header">
@@ -196,8 +196,17 @@ export default async function MerchantDetailPage({ params }: PageProps) {
         <MerchantWorkspaceNav merchantId={merchantId} activeSection="orders" />
 
         <div className="merchant-ops-main min-w-0">
+          <header className="merchant-workspace-module">
+            <div className="merchant-workspace-module-copy min-w-0">
+              <h2 className="merchant-workspace-module-title">Pedidos</h2>
+              <div className="merchant-workspace-module-description">
+                Gestioná y prepará los pedidos de tu comercio.
+              </div>
+            </div>
+          </header>
+
           {merchant.status === "DRAFT" ? (
-            <div className="mb-5">
+            <div className="merchant-workspace-orders-publication mb-5">
               <MerchantPublicationPanel
                 merchantId={merchantId}
                 status={merchant.status}
