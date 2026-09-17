@@ -86,9 +86,7 @@ describe("merchant private workspace shell", () => {
     expect(categories).toContain("action={boundUp}");
     expect(categories).toContain("action={boundDown}");
     expect(categories).toContain('{category.active ? "Visible" : "Oculta"}');
-    expect(categories).toContain(
-      '{category.active ? "Ocultar" : "Mostrar"}',
-    );
+    expect(categories).toContain('{category.active ? "Ocultar" : "Mostrar"}');
     expect(categories).toContain("title=\"Subir categoría\"");
     expect(categories).toContain("title=\"Bajar categoría\"");
     expect(categories).not.toContain('type="checkbox"');
