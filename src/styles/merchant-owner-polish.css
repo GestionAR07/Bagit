@@ -21,7 +21,11 @@
   --mw-shadow-md: 0 18px 48px rgba(8, 63, 102, 0.09);
   --mw-radius: 18px;
   background:
-    radial-gradient(circle at 14% 0%, rgba(32, 174, 229, 0.08), transparent 30rem),
+    radial-gradient(
+      circle at 14% 0%,
+      rgba(32, 174, 229, 0.08),
+      transparent 30rem
+    ),
     linear-gradient(180deg, #f7fbfd 0%, #f3f8fb 100%);
   color: var(--mw-ink);
 }
@@ -95,7 +99,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .merchant-workspace-page .merchant-workspace-primary-btn:hover:not(:disabled) {
+  .merchant-workspace-page
+    .merchant-workspace-primary-btn:hover:not(:disabled) {
     transform: translateY(-1px);
     box-shadow: 0 14px 30px rgba(32, 174, 229, 0.28);
     filter: saturate(1.06);
@@ -144,7 +149,8 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .merchant-workspace-page .merchant-ops-nav-link:not(.merchant-ops-nav-link--active):hover {
+  .merchant-workspace-page
+    .merchant-ops-nav-link:not(.merchant-ops-nav-link--active):hover {
     border-color: var(--mw-line-strong);
     background: #fff;
     box-shadow: var(--mw-shadow-sm);
@@ -223,7 +229,12 @@
   display: block;
   height: 3px;
   margin: -1px -1px 20px;
-  background: linear-gradient(90deg, var(--mw-cyan), #6ed0f3 55%, var(--mw-yellow));
+  background: linear-gradient(
+    90deg,
+    var(--mw-cyan),
+    #6ed0f3 55%,
+    var(--mw-yellow)
+  );
 }
 
 .merchant-workspace-page .merchant-workspace-filters {
@@ -274,7 +285,11 @@
   padding: 24px 26px 24px 58px;
   border: 1px dashed #bddce9;
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(234, 247, 252, 0.78), rgba(255, 255, 255, 0.95));
+  background: linear-gradient(
+    135deg,
+    rgba(234, 247, 252, 0.78),
+    rgba(255, 255, 255, 0.95)
+  );
   color: var(--mw-muted);
   box-shadow: 0 8px 22px rgba(8, 63, 102, 0.035);
 }
@@ -380,7 +395,10 @@
   padding: 20px 22px;
 }
 
-.merchant-workspace-page .merchant-workspace-toggle-card--switch:has(.merchant-workspace-switch-input:checked) {
+.merchant-workspace-page
+  .merchant-workspace-toggle-card--switch:has(
+    .merchant-workspace-switch-input:checked
+  ) {
   border-color: rgba(32, 174, 229, 0.46);
   background: linear-gradient(135deg, #ffffff 0%, #f0faff 100%);
   box-shadow: 0 12px 32px rgba(32, 174, 229, 0.09);
