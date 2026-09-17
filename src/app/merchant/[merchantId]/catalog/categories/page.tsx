@@ -125,16 +125,42 @@ export default async function CategoriesPage({ params }: PageProps) {
                 key={category.id}
                 className="merchant-workspace-card merchant-workspace-category-card"
               >
-                <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+                <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
+                  <div className="flex shrink-0 gap-2">
+                    <form action={boundUp}>
+                      <button
+                        type="submit"
+                        disabled={index === 0}
+                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
+                        aria-label={`Subir ${category.name}`}
+                        title="Subir categoría"
+                      >
+                        ↑
+                      </button>
+                    </form>
+                    <form action={boundDown}>
+                      <button
+                        type="submit"
+                        disabled={index === categories.length - 1}
+                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
+                        aria-label={`Bajar ${category.name}`}
+                        title="Bajar categoría"
+                      >
+                        ↓
+                      </button>
+                    </form>
+                  </div>
+
                   <form
                     action={boundUpdate}
-                    className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center"
+                    className="flex min-w-0 flex-1 gap-2"
                   >
                     <input
                       name="name"
                       defaultValue={category.name}
                       required
                       className="merchant-workspace-input min-w-0 flex-1"
+                      aria-label={`Nombre de la categoría ${category.name}`}
                     />
                     <input
                       type="hidden"
@@ -145,11 +171,11 @@ export default async function CategoriesPage({ params }: PageProps) {
                       type="submit"
                       className="merchant-workspace-secondary-btn shrink-0"
                     >
-                      Guardar nombre
+                      Guardar
                     </button>
                   </form>
 
-                  <div className="flex flex-wrap items-center gap-2 lg:justify-end">
+                  <div className="flex flex-wrap items-center gap-2 xl:shrink-0">
                     <span
                       className={
                         category.active
@@ -157,7 +183,7 @@ export default async function CategoriesPage({ params }: PageProps) {
                           : "inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-slate-100 px-4 text-sm font-bold text-slate-600"
                       }
                     >
-                      {category.active ? "Activo" : "Inactivo"}
+                      {category.active ? "Visible" : "Oculta"}
                     </span>
                     <form action={boundUpdate}>
                       <input type="hidden" name="name" value={category.name} />
@@ -174,41 +200,19 @@ export default async function CategoriesPage({ params }: PageProps) {
                             : "merchant-workspace-primary-btn"
                         }
                       >
-                        {category.active ? "Desactivar" : "Activar"}
+                        {category.active ? "Ocultar" : "Mostrar"}
+                      </button>
+                    </form>
+                    <form action={boundDelete}>
+                      <button
+                        type="submit"
+                        className="merchant-workspace-danger-btn"
+                        aria-label={`Eliminar ${category.name}`}
+                      >
+                        Eliminar
                       </button>
                     </form>
                   </div>
-                </div>
-
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <form action={boundUp}>
-                    <button
-                      type="submit"
-                      disabled={index === 0}
-                      className="merchant-workspace-secondary-btn disabled:opacity-40"
-                      aria-label={`Subir ${category.name}`}
-                    >
-                      ↑
-                    </button>
-                  </form>
-                  <form action={boundDown}>
-                    <button
-                      type="submit"
-                      disabled={index === categories.length - 1}
-                      className="merchant-workspace-secondary-btn disabled:opacity-40"
-                      aria-label={`Bajar ${category.name}`}
-                    >
-                      ↓
-                    </button>
-                  </form>
-                  <form action={boundDelete}>
-                    <button
-                      type="submit"
-                      className="merchant-workspace-danger-btn"
-                    >
-                      Eliminar
-                    </button>
-                  </form>
                 </div>
               </li>
             );
