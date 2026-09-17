@@ -1,0 +1,132 @@
+/* Final workspace consistency pass: continuous gradient background + orders alignment. */
+.merchant-workspace-page {
+  background: linear-gradient(
+    145deg,
+    #f8fcfe 0%,
+    #f5fafc 34%,
+    #f1f8fb 68%,
+    #eef6fa 100%
+  );
+}
+
+.merchant-workspace-orders .merchant-ops-header {
+  background: #ffffff;
+  box-shadow: 0 12px 34px rgba(8, 63, 102, 0.075);
+}
+
+.merchant-workspace-orders .merchant-ops-sound,
+.merchant-workspace-orders .merchant-ops-logout {
+  border: 1px solid var(--mw-line-strong);
+  background: #ffffff;
+  color: var(--mw-navy);
+  box-shadow: none;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.merchant-workspace-orders .merchant-ops-logout {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 0 16px;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-orders .merchant-ops-sound:hover,
+  .merchant-workspace-orders .merchant-ops-logout:hover {
+    border-color: rgba(32, 174, 229, 0.58);
+    background: #f2faff;
+    transform: translateY(-1px);
+  }
+}
+
+.merchant-workspace-orders .merchant-workspace-orders-publication {
+  max-width: 100%;
+}
+
+.merchant-workspace-orders
+  .merchant-workspace-orders-publication
+  .merchant-workspace-card {
+  padding: 22px 24px;
+  box-shadow: 0 8px 24px rgba(8, 63, 102, 0.055);
+}
+
+.merchant-workspace-orders .merchant-ops-summary {
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.merchant-workspace-orders .merchant-ops-stat {
+  border: 1px solid var(--mw-line);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 7px 20px rgba(8, 63, 102, 0.045);
+}
+
+.merchant-workspace-orders .merchant-ops-stat-label {
+  color: var(--mw-muted);
+  font-weight: 700;
+}
+
+.merchant-workspace-orders .merchant-ops-stat-value {
+  color: var(--mw-cyan-strong);
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+  font-weight: 800;
+}
+
+.merchant-workspace-orders .merchant-ops-workspace {
+  gap: 16px;
+}
+
+.merchant-workspace-orders .merchant-ops-board {
+  gap: 14px;
+}
+
+.merchant-workspace-orders .merchant-ops-board > section,
+.merchant-workspace-orders .merchant-ops-today,
+.merchant-workspace-orders .merchant-ops-status {
+  border: 1px solid var(--mw-line);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 24px rgba(8, 63, 102, 0.05);
+}
+
+.merchant-workspace-orders .merchant-ops-board > section,
+.merchant-workspace-orders .merchant-ops-today {
+  padding: 18px;
+}
+
+.merchant-workspace-orders .merchant-ops-status {
+  padding: 18px;
+}
+
+.merchant-workspace-orders .merchant-ops-board h2,
+.merchant-workspace-orders .merchant-ops-today h2,
+.merchant-workspace-orders .merchant-ops-status h2 {
+  color: var(--mw-navy);
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+}
+
+.merchant-workspace-orders .merchant-ops-board .text-muted,
+.merchant-workspace-orders .merchant-ops-today .text-muted,
+.merchant-workspace-orders .merchant-ops-status .text-muted {
+  color: var(--mw-muted);
+}
+
+@media (max-width: 767px) {
+  .merchant-workspace-orders
+    .merchant-workspace-orders-publication
+    .merchant-workspace-card,
+  .merchant-workspace-orders .merchant-ops-board > section,
+  .merchant-workspace-orders .merchant-ops-today,
+  .merchant-workspace-orders .merchant-ops-status {
+    border-radius: 15px;
+  }
+
+  .merchant-workspace-orders .merchant-ops-header-tools {
+    gap: 8px;
+  }
+}
