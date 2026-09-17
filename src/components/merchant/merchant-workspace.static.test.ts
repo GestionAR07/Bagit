@@ -83,7 +83,13 @@ describe("merchant private workspace shell", () => {
     expect(categories).toContain("updateCategoryAction");
     expect(categories).toContain("deleteCategoryAction");
     expect(categories).toContain("reorderCategoryAction");
-    expect(categories).toContain("formAction={boundUp}");
+    expect(categories).toContain("action={boundUp}");
+    expect(categories).toContain("action={boundDown}");
+    expect(categories).toContain('{category.active ? "Activo" : "Inactivo"}');
+    expect(categories).toContain(
+      '{category.active ? "Desactivar" : "Activar"}',
+    );
+    expect(categories).not.toContain('type="checkbox"');
     expect(createProduct).toContain("createProductAction");
     expect(createProduct).toContain("ProductFormSubmitButton");
     expect(createProduct).toContain('mode="create"');
