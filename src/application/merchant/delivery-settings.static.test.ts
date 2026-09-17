@@ -44,7 +44,7 @@ describe("merchant delivery settings static checks", () => {
     expect(actions).not.toMatch(/export const /);
   });
 
-  it("lets the merchant configure pickup and own delivery only", () => {
+  it("lets the merchant configure pickup, preparation and own delivery only", () => {
     const form = read(
       "src/app/merchant/[merchantId]/delivery/delivery-settings-form.tsx",
     );
@@ -53,12 +53,17 @@ describe("merchant delivery settings static checks", () => {
     const useCase = read("src/application/merchant/delivery-settings.ts");
     expect(form).toContain("Ofrecer retiro en el comercio");
     expect(form).toContain("pickup_enabled");
+    expect(form).toContain("Tiempo de preparación del pedido");
+    expect(form).toContain("preparation_minutes");
     expect(form).toContain("Ofrecer envío a domicilio");
     expect(form).toContain(
       "Los clientes podrán elegir entrega en las zonas que tengas activas.",
     );
     expect(form).toContain("merchant_delivery_enabled");
     expect(actions).toContain('formData.get("pickup_enabled")');
+    expect(actions).toContain('formData.get("preparation_minutes")');
+    expect(useCase).toContain("INVALID_PREPARATION");
+    expect(useCase).toContain("MAX_PREPARATION_MINUTES");
     expect(form).toContain("merchant-workspace-switch-input");
     expect(form).toContain("merchant-workspace-form-actions");
     expect(form).toContain("Guardar cambios");
@@ -73,7 +78,7 @@ describe("merchant delivery settings static checks", () => {
     expect(useCase).not.toContain("insertCity");
   });
 
-  it("parses money and persists fulfillment without platform delivery writes", () => {
+  it("persists owner fulfillment without platform delivery writes", () => {
     const useCase = read("src/application/merchant/delivery-settings.ts");
     const repo = read(
       "src/infrastructure/db/repositories/merchant-delivery-repository.ts",
@@ -82,6 +87,7 @@ describe("merchant delivery settings static checks", () => {
     expect(repo).toContain("moneyCents");
     expect(repo).toContain("db.transaction");
     expect(repo).toContain("pickupEnabled");
+    expect(repo).toContain("preparationMinutes");
     expect(repo).not.toContain("platformDeliveryEnabled");
   });
 });
