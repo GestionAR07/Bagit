@@ -1,5 +1,5 @@
 /* Final workspace consistency pass: continuous gradient background + orders alignment. */
-.merchant-workspace-page {
+.merchant-ops {
   background: linear-gradient(
     145deg,
     #f8fcfe 0%,
@@ -7,6 +7,10 @@
     #f1f8fb 68%,
     #eef6fa 100%
   );
+}
+
+.merchant-workspace-page {
+  background: transparent;
 }
 
 .merchant-workspace-orders .merchant-ops-header {
