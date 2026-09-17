@@ -126,31 +126,6 @@ export default async function CategoriesPage({ params }: PageProps) {
                 className="merchant-workspace-card merchant-workspace-category-card"
               >
                 <div className="flex flex-col gap-3 xl:flex-row xl:items-center">
-                  <div className="flex shrink-0 gap-2">
-                    <form action={boundUp}>
-                      <button
-                        type="submit"
-                        disabled={index === 0}
-                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
-                        aria-label={`Subir ${category.name}`}
-                        title="Subir categoría"
-                      >
-                        ↑
-                      </button>
-                    </form>
-                    <form action={boundDown}>
-                      <button
-                        type="submit"
-                        disabled={index === categories.length - 1}
-                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
-                        aria-label={`Bajar ${category.name}`}
-                        title="Bajar categoría"
-                      >
-                        ↓
-                      </button>
-                    </form>
-                  </div>
-
                   <form
                     action={boundUpdate}
                     className="flex min-w-0 flex-1 gap-2"
@@ -176,15 +151,6 @@ export default async function CategoriesPage({ params }: PageProps) {
                   </form>
 
                   <div className="flex flex-wrap items-center gap-2 xl:shrink-0">
-                    <span
-                      className={
-                        category.active
-                          ? "inline-flex min-h-11 items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-sm font-bold text-emerald-700"
-                          : "inline-flex min-h-11 items-center rounded-full border border-slate-200 bg-slate-100 px-4 text-sm font-bold text-slate-600"
-                      }
-                    >
-                      {category.active ? "Visible" : "Oculta"}
-                    </span>
                     <form action={boundUpdate}>
                       <input type="hidden" name="name" value={category.name} />
                       <input
@@ -196,11 +162,57 @@ export default async function CategoriesPage({ params }: PageProps) {
                         type="submit"
                         className={
                           category.active
-                            ? "merchant-workspace-secondary-btn"
-                            : "merchant-workspace-primary-btn"
+                            ? "inline-flex min-h-11 items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 text-sm font-bold text-emerald-700 transition hover:bg-emerald-100"
+                            : "inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-200 bg-slate-100 px-3 text-sm font-bold text-slate-600 transition hover:bg-slate-200"
+                        }
+                        aria-pressed={category.active}
+                        aria-label={`${category.active ? "Ocultar" : "Mostrar"} ${category.name}`}
+                        title={
+                          category.active
+                            ? "Ocultar categoría de la tienda"
+                            : "Mostrar categoría en la tienda"
                         }
                       >
-                        {category.active ? "Ocultar" : "Mostrar"}
+                        <span
+                          aria-hidden="true"
+                          className={
+                            category.active
+                              ? "relative inline-flex h-6 w-11 shrink-0 rounded-full bg-emerald-500"
+                              : "relative inline-flex h-6 w-11 shrink-0 rounded-full bg-slate-300"
+                          }
+                        >
+                          <span
+                            className={
+                              category.active
+                                ? "absolute top-1 left-6 h-4 w-4 rounded-full bg-white shadow-sm"
+                                : "absolute top-1 left-1 h-4 w-4 rounded-full bg-white shadow-sm"
+                            }
+                          />
+                        </span>
+                        {category.active ? "Activa" : "Inactiva"}
+                      </button>
+                    </form>
+
+                    <form action={boundUp}>
+                      <button
+                        type="submit"
+                        disabled={index === 0}
+                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
+                        aria-label={`Subir ${category.name}`}
+                        title="Subir categoría"
+                      >
+                        ↑
+                      </button>
+                    </form>
+                    <form action={boundDown}>
+                      <button
+                        type="submit"
+                        disabled={index === categories.length - 1}
+                        className="merchant-workspace-secondary-btn min-w-11 px-3 disabled:opacity-40"
+                        aria-label={`Bajar ${category.name}`}
+                        title="Bajar categoría"
+                      >
+                        ↓
                       </button>
                     </form>
                     <form action={boundDelete}>
