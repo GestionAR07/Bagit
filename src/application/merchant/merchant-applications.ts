@@ -74,8 +74,10 @@ function buildApprovalSlug(
   applicationId: string,
 ): string {
   const suffix =
-    applicationId.replace(/[^a-z0-9]/gi, "").toLowerCase().slice(-8) ||
-    "comercio";
+    applicationId
+      .replace(/[^a-z0-9]/gi, "")
+      .toLowerCase()
+      .slice(-8) || "comercio";
   const normalizedName = normalizeSlug(businessName) || "comercio";
   const maxBaseLength = Math.max(1, 80 - suffix.length - 1);
   const base =
