@@ -160,11 +160,7 @@ export default async function CategoriesPage({ params }: PageProps) {
                       {category.active ? "Activo" : "Inactivo"}
                     </span>
                     <form action={boundUpdate}>
-                      <input
-                        type="hidden"
-                        name="name"
-                        value={category.name}
-                      />
+                      <input type="hidden" name="name" value={category.name} />
                       <input
                         type="hidden"
                         name="active"
