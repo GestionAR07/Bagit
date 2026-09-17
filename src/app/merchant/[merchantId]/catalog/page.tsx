@@ -72,8 +72,12 @@ export default async function CatalogPage({ params, searchParams }: PageProps) {
       .map((product) => product.imagePath)
       .filter((path): path is string => Boolean(path)),
   );
-  const hasFilters = Boolean(filters.q || filters.category || filters.available);
-  const activeCategoryCount = categories.filter((category) => category.active).length;
+  const hasFilters = Boolean(
+    filters.q || filters.category || filters.available,
+  );
+  const activeCategoryCount = categories.filter(
+    (category) => category.active,
+  ).length;
 
   return (
     <MerchantWorkspacePage
@@ -173,7 +177,10 @@ export default async function CatalogPage({ params, searchParams }: PageProps) {
                 <option value="">Todas</option>
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>
-                    {formatMerchantCategoryLabel(category.name, category.active)}
+                    {formatMerchantCategoryLabel(
+                      category.name,
+                      category.active,
+                    )}
                   </option>
                 ))}
               </select>
@@ -242,7 +249,10 @@ export default async function CatalogPage({ params, searchParams }: PageProps) {
               const status = getMerchantProductAvailabilityStatus(product);
 
               return (
-                <li key={product.id} className="merchant-workspace-product-card">
+                <li
+                  key={product.id}
+                  className="merchant-workspace-product-card"
+                >
                   <div className="merchant-workspace-product-body">
                     <ProductImageThumbnail
                       name={product.name}

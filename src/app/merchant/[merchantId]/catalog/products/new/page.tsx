@@ -57,7 +57,9 @@ export default async function NewProductPage({ params }: PageProps) {
             <span className={styles.emptyIcon} aria-hidden="true">
               +
             </span>
-            <h2 className={styles.emptyTitle}>Primero necesitás una categoría</h2>
+            <h2 className={styles.emptyTitle}>
+              Primero necesitás una categoría
+            </h2>
             <p className={styles.emptyCopy}>
               No hay categorías activas. Reactivá una categoría o creá una nueva
               antes de agregar productos.
@@ -170,7 +172,8 @@ export default async function NewProductPage({ params }: PageProps) {
                 <div>
                   <h3 className={styles.sectionTitle}>Descripción</h3>
                   <p className={styles.sectionCopy}>
-                    Contale al cliente qué incluye o qué hace especial al producto.
+                    Contale al cliente qué incluye o qué hace especial al
+                    producto.
                   </p>
                 </div>
               </div>
@@ -192,7 +195,8 @@ export default async function NewProductPage({ params }: PageProps) {
                 <div>
                   <h3 className={styles.sectionTitle}>Publicación</h3>
                   <p className={styles.sectionCopy}>
-                    Elegí si se muestra y si puede pedirse desde el primer momento.
+                    Elegí si se muestra y si puede pedirse desde el primer
+                    momento.
                   </p>
                 </div>
               </div>
@@ -250,15 +254,21 @@ export default async function NewProductPage({ params }: PageProps) {
 
         <aside className={styles.guideCard}>
           <p className={styles.guideEyebrow}>Antes de crear</p>
-          <h2 className={styles.guideTitle}>Tres claves para una buena ficha</h2>
+          <h2 className={styles.guideTitle}>
+            Tres claves para una buena ficha
+          </h2>
           <ul className={styles.guideList}>
             <li className={styles.guideItem}>
               <span className={styles.guideDot}>1</span>
-              <span>Usá un nombre corto que el cliente reconozca al instante.</span>
+              <span>
+                Usá un nombre corto que el cliente reconozca al instante.
+              </span>
             </li>
             <li className={styles.guideItem}>
               <span className={styles.guideDot}>2</span>
-              <span>Ingresá el precio final que querés mostrar en la tienda.</span>
+              <span>
+                Ingresá el precio final que querés mostrar en la tienda.
+              </span>
             </li>
             <li className={styles.guideItem}>
               <span className={styles.guideDot}>3</span>

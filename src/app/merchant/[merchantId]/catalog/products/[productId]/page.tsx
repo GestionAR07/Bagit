@@ -207,7 +207,9 @@ export default async function EditProductPage({
                     <div className={styles.formSectionHeader}>
                       <span className={styles.sectionNumber}>1</span>
                       <div>
-                        <h3 className={styles.sectionTitle}>Datos principales</h3>
+                        <h3 className={styles.sectionTitle}>
+                          Datos principales
+                        </h3>
                         <p className={styles.sectionCopy}>
                           Nombre, categoría, precio y control de stock.
                         </p>
@@ -291,8 +293,8 @@ export default async function EditProductPage({
                       <div>
                         <h3 className={styles.sectionTitle}>Publicación</h3>
                         <p className={styles.sectionCopy}>
-                          Controlá si se ve en la tienda y si está disponible para
-                          pedir.
+                          Controlá si se ve en la tienda y si está disponible
+                          para pedir.
                         </p>
                       </div>
                     </div>
