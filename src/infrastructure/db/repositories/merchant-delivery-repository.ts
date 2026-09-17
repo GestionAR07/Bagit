@@ -70,6 +70,7 @@ export async function saveMerchantDeliverySettings(
   merchantId: string,
   input: {
     pickupEnabled?: boolean;
+    preparationMinutes?: number;
     merchantDeliveryEnabled: boolean;
     zones: readonly UpsertMerchantDeliveryZoneInput[];
   },
@@ -82,6 +83,9 @@ export async function saveMerchantDeliverySettings(
         ...(input.pickupEnabled === undefined
           ? {}
           : { pickupEnabled: input.pickupEnabled }),
+        ...(input.preparationMinutes === undefined
+          ? {}
+          : { preparationMinutes: input.preparationMinutes }),
         merchantDeliveryEnabled: input.merchantDeliveryEnabled,
         updatedAt: new Date(),
       })
