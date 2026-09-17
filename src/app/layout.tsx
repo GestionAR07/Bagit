@@ -6,6 +6,7 @@ import { APP_NAME, APP_TAGLINE } from "@/lib/app-info";
 import "@/styles/globals.css";
 import "@/styles/brand-theme.css";
 import "@/styles/merchant-owner-polish.css";
+import "@/styles/merchant-workspace-consistency.css";
 
 const inter = Inter({
   subsets: ["latin"],
