@@ -28,6 +28,7 @@ import { ProductFormSubmitButton } from "../../product-form-submit-button";
 import { ProductImageEditor } from "../../product-image-editor";
 import { ProductSaveFeedback } from "../../product-save-feedback";
 import { ProductStockControl } from "../../product-stock-control";
+import styles from "../../catalog-polish.module.css";
 
 export const dynamic = "force-dynamic";
 
@@ -135,7 +136,9 @@ export default async function EditProductPage({
         </Link>
       }
     >
-      <div className="merchant-workspace-edit-stack">
+      <div
+        className={`${styles.productEditorShell} merchant-workspace-edit-stack`}
+      >
         <nav
           className="merchant-workspace-segmented"
           aria-label="Secciones del producto"
@@ -180,112 +183,169 @@ export default async function EditProductPage({
           />
         ) : (
           <div className="merchant-workspace-edit-layout">
-            <section className="merchant-workspace-card merchant-workspace-edit-main">
-              <h2 className="merchant-workspace-card-title">
-                Información del producto
-              </h2>
+            <section
+              className={`${styles.productFormCard} merchant-workspace-card merchant-workspace-edit-main`}
+            >
+              <header className={styles.formHeader}>
+                <div>
+                  <p className={styles.formEyebrow}>Ficha comercial</p>
+                  <h2 className={styles.formTitle}>Información del producto</h2>
+                  <p className={styles.formCopy}>
+                    Actualizá precio, stock, descripción y visibilidad desde un
+                    solo lugar.
+                  </p>
+                </div>
+                <span className={styles.formBadge}>Editable</span>
+              </header>
+
               <form
                 action={boundUpdate}
                 className="merchant-workspace-product-form"
               >
-                <div className="merchant-workspace-product-grid">
-                  <label className="merchant-workspace-field">
-                    <span>Nombre</span>
-                    <input
-                      name="name"
-                      defaultValue={product.name}
-                      required
-                      className="merchant-workspace-input"
-                    />
-                  </label>
+                <div className={styles.productFormInner}>
+                  <section className={styles.formSection}>
+                    <div className={styles.formSectionHeader}>
+                      <span className={styles.sectionNumber}>1</span>
+                      <div>
+                        <h3 className={styles.sectionTitle}>Datos principales</h3>
+                        <p className={styles.sectionCopy}>
+                          Nombre, categoría, precio y control de stock.
+                        </p>
+                      </div>
+                    </div>
 
-                  <label className="merchant-workspace-field">
-                    <span>Categoría</span>
-                    <select
-                      name="merchantCategoryId"
-                      defaultValue={product.merchantCategoryId}
-                      className="merchant-workspace-input"
-                    >
-                      {selectableCategories.map((category) => (
-                        <option key={category.id} value={category.id}>
-                          {formatMerchantCategoryLabel(
-                            category.name,
-                            category.active,
-                          )}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                    <div className="merchant-workspace-product-grid">
+                      <label className="merchant-workspace-field">
+                        <span>Nombre</span>
+                        <input
+                          name="name"
+                          defaultValue={product.name}
+                          required
+                          className="merchant-workspace-input"
+                        />
+                      </label>
 
-                  <label className="merchant-workspace-field">
-                    <span>Precio (ARS)</span>
-                    <input
-                      name="priceInput"
-                      defaultValue={formatMoneyCentsArs(
-                        moneyCents(product.priceCents),
-                      ).replace("$", "")}
-                      required
-                      className="merchant-workspace-input"
-                    />
-                  </label>
+                      <label className="merchant-workspace-field">
+                        <span>Categoría</span>
+                        <select
+                          name="merchantCategoryId"
+                          defaultValue={product.merchantCategoryId}
+                          className="merchant-workspace-input"
+                        >
+                          {selectableCategories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                              {formatMerchantCategoryLabel(
+                                category.name,
+                                category.active,
+                              )}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
 
-                  <ProductStockControl
-                    stockModeDefault={product.stockMode}
-                    stockQuantityDefault={product.stockQuantity ?? ""}
-                  />
+                      <label className="merchant-workspace-field">
+                        <span>Precio (ARS)</span>
+                        <input
+                          name="priceInput"
+                          inputMode="decimal"
+                          defaultValue={formatMoneyCentsArs(
+                            moneyCents(product.priceCents),
+                          ).replace("$", "")}
+                          required
+                          className="merchant-workspace-input"
+                        />
+                      </label>
+
+                      <ProductStockControl
+                        stockModeDefault={product.stockMode}
+                        stockQuantityDefault={product.stockQuantity ?? ""}
+                      />
+                    </div>
+                  </section>
+
+                  <section className={styles.formSection}>
+                    <div className={styles.formSectionHeader}>
+                      <span className={styles.sectionNumber}>2</span>
+                      <div>
+                        <h3 className={styles.sectionTitle}>Descripción</h3>
+                        <p className={styles.sectionCopy}>
+                          Explicá brevemente qué incluye el producto.
+                        </p>
+                      </div>
+                    </div>
+
+                    <label className="merchant-workspace-field merchant-workspace-field--full">
+                      <span>Descripción</span>
+                      <textarea
+                        name="description"
+                        rows={4}
+                        defaultValue={product.description}
+                        className="merchant-workspace-input merchant-workspace-textarea"
+                      />
+                    </label>
+                  </section>
+
+                  <section className={styles.formSection}>
+                    <div className={styles.formSectionHeader}>
+                      <span className={styles.sectionNumber}>3</span>
+                      <div>
+                        <h3 className={styles.sectionTitle}>Publicación</h3>
+                        <p className={styles.sectionCopy}>
+                          Controlá si se ve en la tienda y si está disponible para
+                          pedir.
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="merchant-workspace-commerce-states">
+                      <p className="merchant-workspace-commerce-states-title">
+                        Estados comerciales
+                      </p>
+                      <label className="merchant-workspace-check-row">
+                        <input
+                          type="checkbox"
+                          name="active"
+                          defaultChecked={product.active}
+                          className="merchant-workspace-checkbox"
+                        />
+                        <span className="merchant-workspace-check-copy">
+                          <span className="merchant-workspace-check-title">
+                            Mostrar en la tienda
+                          </span>
+                          <span className="merchant-workspace-check-help">
+                            Visible para tus clientes.
+                          </span>
+                        </span>
+                      </label>
+                      <label className="merchant-workspace-check-row">
+                        <input
+                          type="checkbox"
+                          name="available"
+                          value="on"
+                          defaultChecked={product.available}
+                          className="merchant-workspace-checkbox"
+                        />
+                        <span className="merchant-workspace-check-copy">
+                          <span className="merchant-workspace-check-title">
+                            Disponible para pedir
+                          </span>
+                          <span className="merchant-workspace-check-help">
+                            Podés pausarlo temporalmente sin eliminarlo.
+                          </span>
+                        </span>
+                      </label>
+                      <input type="hidden" name="available" value="off" />
+                    </div>
+                  </section>
                 </div>
 
-                <label className="merchant-workspace-field merchant-workspace-field--full">
-                  <span>Descripción</span>
-                  <textarea
-                    name="description"
-                    rows={3}
-                    defaultValue={product.description}
-                    className="merchant-workspace-input merchant-workspace-textarea"
-                  />
-                </label>
-
-                <div className="merchant-workspace-commerce-states">
-                  <p className="merchant-workspace-commerce-states-title">
-                    Estados comerciales
+                <footer className={styles.formFooter}>
+                  <p className={styles.formFooterCopy}>
+                    Los cambios se aplican a la ficha del producto después de
+                    guardar.
                   </p>
-                  <label className="merchant-workspace-check-row">
-                    <input
-                      type="checkbox"
-                      name="active"
-                      defaultChecked={product.active}
-                      className="merchant-workspace-checkbox"
-                    />
-                    <span className="merchant-workspace-check-copy">
-                      <span className="merchant-workspace-check-title">
-                        Mostrar en la tienda
-                      </span>
-                      <span className="merchant-workspace-check-help">
-                        Visible para tus clientes.
-                      </span>
-                    </span>
-                  </label>
-                  <label className="merchant-workspace-check-row">
-                    <input
-                      type="checkbox"
-                      name="available"
-                      value="on"
-                      defaultChecked={product.available}
-                      className="merchant-workspace-checkbox"
-                    />
-                    <span className="merchant-workspace-check-copy">
-                      <span className="merchant-workspace-check-title">
-                        Disponible para pedir
-                      </span>
-                      <span className="merchant-workspace-check-help">
-                        Podés pausarlo temporalmente sin eliminarlo.
-                      </span>
-                    </span>
-                  </label>
-                  <input type="hidden" name="available" value="off" />
-                </div>
-
-                <ProductFormSubmitButton mode="edit" />
+                  <ProductFormSubmitButton mode="edit" />
+                </footer>
               </form>
             </section>
 
