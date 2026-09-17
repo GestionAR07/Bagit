@@ -15,7 +15,7 @@
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "format": "prettier --write .",
-    "format:check": "prettier --write src/styles/merchant-owner-polish.css && git diff -- src/styles/merchant-owner-polish.css && exit 1",
+    "format:check": "prettier --check .",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
