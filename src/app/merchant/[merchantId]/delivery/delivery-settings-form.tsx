@@ -82,6 +82,32 @@ export function DeliverySettingsForm({ merchantId, settings }: Props) {
         />
       </label>
 
+      <section className="merchant-workspace-card">
+        <label className="merchant-workspace-field">
+          <span className="merchant-workspace-card-title">
+            Tiempo de preparación del pedido
+          </span>
+          <span className="merchant-workspace-card-copy">
+            Indicá cuántos minutos necesitás normalmente antes de entregar o
+            despachar un pedido.
+          </span>
+          <span className="merchant-workspace-inline-input mt-3">
+            <input
+              type="number"
+              name="preparation_minutes"
+              inputMode="numeric"
+              min={0}
+              max={1440}
+              step={1}
+              required
+              defaultValue={settings.preparationMinutes}
+              className="merchant-workspace-input merchant-workspace-input--narrow"
+            />
+            <span className="text-sm text-[#4A6B82]">minutos</span>
+          </span>
+        </label>
+      </section>
+
       {settings.zones.length === 0 ? (
         <p className="merchant-workspace-empty" role="status">
           No hay zonas geográficas en {settings.cityName} para configurar
