@@ -1,10 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { AuthzError } from "@/server/auth/errors";
 import type { MerchantActivationReadiness } from "./activate-merchant";
-import {
-  publishMerchant,
-  type PublishMerchantDeps,
-} from "./publish-merchant";
+import { publishMerchant, type PublishMerchantDeps } from "./publish-merchant";
 
 const readyMerchant: MerchantActivationReadiness = {
   merchantId: "merchant-1",
