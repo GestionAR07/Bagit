@@ -1,0 +1,492 @@
+/* Owner workspace visual polish. Scoped to /merchant pages via MerchantWorkspacePage. */
+.merchant-workspace-page {
+  --mw-navy: #083f66;
+  --mw-cyan: #20aee5;
+  --mw-cyan-strong: #1098cf;
+  --mw-cyan-soft: #eaf7fc;
+  --mw-yellow: #ffc51b;
+  --mw-ink: #123b57;
+  --mw-muted: #5f7d91;
+  --mw-line: #d9e9f2;
+  --mw-line-strong: #c7e2ef;
+  --mw-surface: #ffffff;
+  --mw-surface-soft: #f7fbfd;
+  --mw-success: #138a5b;
+  --mw-success-soft: #ebfbf4;
+  --mw-warning: #a75a00;
+  --mw-warning-soft: #fff8e8;
+  --mw-danger: #bd2f45;
+  --mw-danger-soft: #fff1f3;
+  --mw-shadow-sm: 0 8px 24px rgba(8, 63, 102, 0.06);
+  --mw-shadow-md: 0 18px 48px rgba(8, 63, 102, 0.09);
+  --mw-radius: 18px;
+  background:
+    radial-gradient(
+      circle at 14% 0%,
+      rgba(32, 174, 229, 0.08),
+      transparent 30rem
+    ),
+    linear-gradient(180deg, #f7fbfd 0%, #f3f8fb 100%);
+  color: var(--mw-ink);
+}
+
+.merchant-workspace-page .merchant-ops-header {
+  border: 1px solid rgba(8, 63, 102, 0.1);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--mw-shadow-md);
+  backdrop-filter: blur(14px);
+}
+
+.merchant-workspace-page .merchant-ops-mark {
+  color: var(--mw-cyan);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.merchant-workspace-page .merchant-ops-title,
+.merchant-workspace-page .merchant-workspace-module-title,
+.merchant-workspace-page .merchant-workspace-card-title,
+.merchant-workspace-page .merchant-workspace-settings-pane-title {
+  color: var(--mw-navy);
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+}
+
+.merchant-workspace-page .merchant-ops-kicker,
+.merchant-workspace-page .merchant-workspace-module-description,
+.merchant-workspace-page .merchant-workspace-card-copy,
+.merchant-workspace-page .merchant-workspace-check-help,
+.merchant-workspace-page .merchant-workspace-product-meta,
+.merchant-workspace-page .merchant-workspace-status-muted {
+  color: var(--mw-muted);
+}
+
+.merchant-workspace-page .merchant-ops-store-link,
+.merchant-workspace-page .merchant-workspace-secondary-btn,
+.merchant-workspace-page .merchant-workspace-toolbar-link {
+  border-color: var(--mw-line-strong);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--mw-navy);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease,
+    background-color 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page .merchant-ops-store-link:hover,
+  .merchant-workspace-page .merchant-workspace-secondary-btn:hover,
+  .merchant-workspace-page .merchant-workspace-toolbar-link:hover {
+    border-color: rgba(32, 174, 229, 0.65);
+    background: var(--mw-cyan-soft);
+    box-shadow: 0 8px 22px rgba(32, 174, 229, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+.merchant-workspace-page .merchant-workspace-primary-btn {
+  border: 1px solid var(--mw-cyan);
+  background: linear-gradient(135deg, var(--mw-cyan) 0%, #18a4dd 100%);
+  color: #fff;
+  box-shadow: 0 10px 24px rgba(32, 174, 229, 0.22);
+  font-weight: 750;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page
+    .merchant-workspace-primary-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 30px rgba(32, 174, 229, 0.28);
+    filter: saturate(1.06);
+  }
+}
+
+.merchant-workspace-page .merchant-workspace-primary-btn:disabled {
+  border-color: #c8dbe5;
+  background: #dce8ee;
+  color: #7892a2;
+  box-shadow: none;
+}
+
+.merchant-workspace-page .merchant-ops-nav {
+  gap: 10px;
+}
+
+.merchant-workspace-page .merchant-ops-nav-link {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--mw-line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--mw-ink);
+  font-weight: 700;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.merchant-workspace-page .merchant-ops-nav-link--active {
+  border-color: var(--mw-navy);
+  background: linear-gradient(135deg, var(--mw-navy) 0%, #0d527d 100%);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(8, 63, 102, 0.18);
+}
+
+.merchant-workspace-page .merchant-ops-nav-link--active::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--mw-yellow);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page
+    .merchant-ops-nav-link:not(.merchant-ops-nav-link--active):hover {
+    border-color: var(--mw-line-strong);
+    background: #fff;
+    box-shadow: var(--mw-shadow-sm);
+    transform: translateX(2px);
+  }
+}
+
+.merchant-workspace-page .merchant-workspace-module {
+  margin-bottom: 20px;
+  padding: 2px 4px 0;
+}
+
+.merchant-workspace-page .merchant-workspace-module-title {
+  font-size: clamp(1.35rem, 1.15rem + 0.5vw, 1.75rem);
+  letter-spacing: -0.025em;
+}
+
+.merchant-workspace-page .merchant-workspace-module-description {
+  margin-top: 5px;
+  line-height: 1.6;
+}
+
+.merchant-workspace-page .merchant-workspace-toolbar {
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 5px;
+  border: 1px solid var(--mw-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  width: fit-content;
+  box-shadow: 0 5px 16px rgba(8, 63, 102, 0.04);
+}
+
+.merchant-workspace-page .merchant-workspace-toolbar-link {
+  border-radius: 999px;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.merchant-workspace-page .merchant-workspace-toolbar-link--active {
+  border-color: rgba(32, 174, 229, 0.42);
+  background: var(--mw-cyan-soft);
+  color: var(--mw-navy);
+  box-shadow: 0 5px 14px rgba(32, 174, 229, 0.09);
+}
+
+.merchant-workspace-page .merchant-workspace-card,
+.merchant-workspace-page .merchant-workspace-settings-pane {
+  border: 1px solid var(--mw-line);
+  border-radius: var(--mw-radius);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--mw-shadow-sm);
+}
+
+.merchant-workspace-page .merchant-workspace-card {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.merchant-workspace-page .merchant-workspace-form-panel,
+.merchant-workspace-page .merchant-workspace-product-form {
+  box-shadow: var(--mw-shadow-md);
+}
+
+.merchant-workspace-page .merchant-workspace-product-form {
+  position: relative;
+  overflow: hidden;
+}
+
+.merchant-workspace-page .merchant-workspace-product-form::before,
+.merchant-workspace-page .merchant-workspace-form-panel::before {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: -1px -1px 20px;
+  background: linear-gradient(
+    90deg,
+    var(--mw-cyan),
+    #6ed0f3 55%,
+    var(--mw-yellow)
+  );
+}
+
+.merchant-workspace-page .merchant-workspace-filters {
+  gap: 14px;
+  padding: 18px;
+  box-shadow: 0 10px 28px rgba(8, 63, 102, 0.06);
+}
+
+.merchant-workspace-page .merchant-workspace-field > span:first-child {
+  color: var(--mw-ink);
+  font-weight: 720;
+}
+
+.merchant-workspace-page .merchant-workspace-input,
+.merchant-workspace-page textarea.merchant-workspace-input,
+.merchant-workspace-page select.merchant-workspace-input {
+  border: 1px solid #d5e6ef;
+  background: #f8fcfe;
+  color: var(--mw-ink);
+  border-radius: 13px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.merchant-workspace-page .merchant-workspace-input:hover {
+  border-color: #bfdde9;
+  background: #fff;
+}
+
+.merchant-workspace-page .merchant-workspace-input:focus {
+  border-color: var(--mw-cyan);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(32, 174, 229, 0.12);
+}
+
+.merchant-workspace-page .merchant-workspace-textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.merchant-workspace-page .merchant-workspace-empty {
+  position: relative;
+  margin-top: 16px;
+  padding: 24px 26px 24px 58px;
+  border: 1px dashed #bddce9;
+  border-radius: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(234, 247, 252, 0.78),
+    rgba(255, 255, 255, 0.95)
+  );
+  color: var(--mw-muted);
+  box-shadow: 0 8px 22px rgba(8, 63, 102, 0.035);
+}
+
+.merchant-workspace-page .merchant-workspace-empty::before {
+  content: "＋";
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: var(--mw-cyan-soft);
+  color: var(--mw-cyan-strong);
+  font-weight: 800;
+}
+
+.merchant-workspace-page .merchant-workspace-inline-link {
+  color: var(--mw-cyan-strong);
+  font-weight: 750;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.merchant-workspace-page .merchant-workspace-product-grid,
+.merchant-workspace-page .merchant-workspace-category-list,
+.merchant-workspace-page .merchant-workspace-zone-grid {
+  gap: 16px;
+}
+
+.merchant-workspace-page .merchant-workspace-product-card,
+.merchant-workspace-page .merchant-workspace-category-card,
+.merchant-workspace-page .merchant-workspace-zone-card {
+  border-color: var(--mw-line);
+  background: #fff;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page .merchant-workspace-product-card:hover,
+  .merchant-workspace-page .merchant-workspace-category-card:hover,
+  .merchant-workspace-page .merchant-workspace-zone-card:hover {
+    border-color: #b9dce9;
+    box-shadow: 0 16px 38px rgba(8, 63, 102, 0.08);
+    transform: translateY(-1px);
+  }
+}
+
+.merchant-workspace-page .merchant-workspace-product-name {
+  color: var(--mw-navy);
+  font-family: var(--font-sora), var(--font-inter), sans-serif;
+  font-weight: 760;
+}
+
+.merchant-workspace-page .merchant-workspace-product-price {
+  color: var(--mw-navy);
+  font-weight: 820;
+}
+
+.merchant-workspace-page .merchant-workspace-status-live {
+  color: var(--mw-success);
+  font-weight: 750;
+}
+
+.merchant-workspace-page .merchant-workspace-active-pill {
+  border: 1px solid #bcebd6;
+  background: var(--mw-success-soft);
+  color: #08704a;
+  border-radius: 999px;
+  font-weight: 750;
+}
+
+.merchant-workspace-page .merchant-workspace-commerce-states {
+  border: 1px solid #d5e9f2;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #f5fbfe 0%, #eef8fc 100%);
+}
+
+.merchant-workspace-page .merchant-workspace-commerce-states-title {
+  color: var(--mw-navy);
+  font-weight: 800;
+}
+
+.merchant-workspace-page .merchant-workspace-check-row {
+  border-radius: 12px;
+  transition: background-color 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page .merchant-workspace-check-row:hover {
+    background: rgba(255, 255, 255, 0.65);
+  }
+}
+
+.merchant-workspace-page .merchant-workspace-check-title {
+  color: var(--mw-ink);
+  font-weight: 750;
+}
+
+.merchant-workspace-page .merchant-workspace-toggle-card {
+  padding: 20px 22px;
+}
+
+.merchant-workspace-page
+  .merchant-workspace-toggle-card--switch:has(
+    .merchant-workspace-switch-input:checked
+  ) {
+  border-color: rgba(32, 174, 229, 0.46);
+  background: linear-gradient(135deg, #ffffff 0%, #f0faff 100%);
+  box-shadow: 0 12px 32px rgba(32, 174, 229, 0.09);
+}
+
+.merchant-workspace-page .merchant-workspace-switch-track {
+  box-shadow: inset 0 0 0 1px rgba(8, 63, 102, 0.08);
+}
+
+.merchant-workspace-page .merchant-workspace-settings-stack {
+  gap: 16px;
+}
+
+.merchant-workspace-page .merchant-workspace-settings-pane {
+  padding: 18px 20px;
+}
+
+.merchant-workspace-page .merchant-workspace-zone-header {
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #e5f0f5;
+}
+
+.merchant-workspace-page .merchant-workspace-form-actions {
+  position: sticky;
+  bottom: 12px;
+  z-index: 4;
+  margin-top: 4px;
+  padding: 12px;
+  border: 1px solid rgba(217, 233, 242, 0.92);
+  border-radius: 16px;
+  background: rgba(247, 251, 253, 0.88);
+  box-shadow: 0 14px 36px rgba(8, 63, 102, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.merchant-workspace-page .merchant-workspace-alert {
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(8, 63, 102, 0.04);
+}
+
+.merchant-workspace-page .merchant-workspace-alert--success {
+  border-color: #b8e8d3;
+  background: var(--mw-success-soft);
+  color: #086a46;
+}
+
+.merchant-workspace-page .merchant-workspace-alert--error {
+  border-color: #f1c6ce;
+  background: var(--mw-danger-soft);
+  color: #9c2337;
+}
+
+.merchant-workspace-page .merchant-workspace-danger-btn {
+  border-color: #f1c6ce;
+  background: #fff;
+  color: var(--mw-danger);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .merchant-workspace-page .merchant-workspace-danger-btn:hover {
+    background: var(--mw-danger-soft);
+  }
+}
+
+.merchant-workspace-page input[type="checkbox"] {
+  accent-color: var(--mw-cyan);
+}
+
+@media (max-width: 767px) {
+  .merchant-workspace-page .merchant-ops-header,
+  .merchant-workspace-page .merchant-workspace-card,
+  .merchant-workspace-page .merchant-workspace-settings-pane,
+  .merchant-workspace-page .merchant-workspace-empty {
+    border-radius: 15px;
+  }
+
+  .merchant-workspace-page .merchant-workspace-toolbar {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .merchant-workspace-page .merchant-workspace-toolbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .merchant-workspace-page .merchant-workspace-form-actions {
+    bottom: 8px;
+  }
+}
