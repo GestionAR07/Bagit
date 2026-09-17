@@ -31,6 +31,7 @@ function deliverySettingsDeps() {
         cityId: merchant.cityId,
         cityName: merchant.cityName,
         pickupEnabled: merchant.pickupEnabled,
+        preparationMinutes: merchant.preparationMinutes,
         merchantDeliveryEnabled: merchant.merchantDeliveryEnabled,
       };
     },
