@@ -85,11 +85,14 @@ describe("merchant private workspace shell", () => {
     expect(categories).toContain("reorderCategoryAction");
     expect(categories).toContain("action={boundUp}");
     expect(categories).toContain("action={boundDown}");
-    expect(categories).toContain('{category.active ? "Activo" : "Inactivo"}');
-    expect(categories).toContain(
-      '{category.active ? "Desactivar" : "Activar"}',
-    );
+    expect(categories).toContain('{category.active ? "Activa" : "Inactiva"}');
+    expect(categories).toContain("aria-pressed={category.active}");
+    expect(categories).toContain("Ocultar categoría de la tienda");
+    expect(categories).toContain("Mostrar categoría en la tienda");
+    expect(categories).toContain("title=\"Subir categoría\"");
+    expect(categories).toContain("title=\"Bajar categoría\"");
     expect(categories).not.toContain('type="checkbox"');
+    expect(categories).not.toContain('{category.active ? "Desactivar" : "Activar"}');
     expect(createProduct).toContain("createProductAction");
     expect(createProduct).toContain("ProductFormSubmitButton");
     expect(createProduct).toContain('mode="create"');
