@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { PublicBrandWordmark } from "@/components/storefront/public-brand-wordmark";
 import { hasDatabaseConfig } from "@/infrastructure/db/env";
 import {
@@ -7,6 +8,8 @@ import {
   listZones,
 } from "@/infrastructure/db/repositories/geography-repository";
 import { APP_NAME } from "@/lib/app-info";
+import { requireActiveUser } from "@/server/auth/authorization";
+import { isAuthzError } from "@/server/auth/errors";
 import { MerchantApplicationForm } from "./merchant-application-form";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +19,18 @@ export const metadata: Metadata = {
 };
 
 export default async function SumarComercioPage() {
+  try {
+    await requireActiveUser();
+  } catch (error) {
+    if (isAuthzError(error)) {
+      if (error.code === "UNAUTHENTICATED") {
+        redirect("/login?next=/sumar-comercio");
+      }
+      redirect("/acceso-denegado");
+    }
+    throw error;
+  }
+
   const databaseAvailable = hasDatabaseConfig();
   const [cities, zones] = databaseAvailable
     ? await Promise.all([listCities(), listZones()])

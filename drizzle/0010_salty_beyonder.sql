@@ -1,0 +1,3 @@
+ALTER TABLE "merchant_applications" ADD COLUMN "applicant_user_id" uuid;--> statement-breakpoint
+ALTER TABLE "merchant_applications" ADD CONSTRAINT "merchant_applications_applicant_user_id_user_profiles_id_fk" FOREIGN KEY ("applicant_user_id") REFERENCES "public"."user_profiles"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "merchant_applications_applicant_user_id_idx" ON "merchant_applications" USING btree ("applicant_user_id");
