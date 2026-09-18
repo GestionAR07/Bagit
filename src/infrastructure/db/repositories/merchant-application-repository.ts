@@ -11,6 +11,7 @@ export type MerchantApplicationDbTx = Parameters<
 export type MerchantApplicationRecord = {
   id: string;
   status: string;
+  applicantUserId: string | null;
   businessName: string;
   contactName: string;
   contactEmail: string;
@@ -30,6 +31,7 @@ export type MerchantApplicationRecord = {
 };
 
 export type InsertMerchantApplicationInput = {
+  applicantUserId?: string | null;
   businessName: string;
   contactName: string;
   contactEmail: string;
@@ -63,6 +65,7 @@ function normalizeApplicationBusinessName(businessName: string): string {
 function mapApplicationRow(row: {
   id: string;
   status: string;
+  applicantUserId: string | null;
   businessName: string;
   contactName: string;
   contactEmail: string;
@@ -91,6 +94,7 @@ async function selectApplicationById(
     .select({
       id: merchantApplications.id,
       status: merchantApplications.status,
+      applicantUserId: merchantApplications.applicantUserId,
       businessName: merchantApplications.businessName,
       contactName: merchantApplications.contactName,
       contactEmail: merchantApplications.contactEmail,
@@ -126,6 +130,7 @@ export async function insertMerchantApplication(
   const inserted = await executor
     .insert(merchantApplications)
     .values({
+      applicantUserId: input.applicantUserId ?? null,
       businessName: input.businessName,
       contactName: input.contactName,
       contactEmail: normalizeApplicationEmail(input.contactEmail),
@@ -158,6 +163,7 @@ export async function listMerchantApplicationsForAdmin(
     .select({
       id: merchantApplications.id,
       status: merchantApplications.status,
+      applicantUserId: merchantApplications.applicantUserId,
       businessName: merchantApplications.businessName,
       contactName: merchantApplications.contactName,
       contactEmail: merchantApplications.contactEmail,
@@ -204,6 +210,7 @@ export async function findPendingDuplicate(
     .select({
       id: merchantApplications.id,
       status: merchantApplications.status,
+      applicantUserId: merchantApplications.applicantUserId,
       businessName: merchantApplications.businessName,
       contactName: merchantApplications.contactName,
       contactEmail: merchantApplications.contactEmail,

@@ -17,6 +17,7 @@ const ZONE_ID = "22222222-2222-4222-8222-222222222222";
 const pendingApplication = (): MerchantApplicationRecord => ({
   id: "app-1",
   status: "PENDING",
+  applicantUserId: null,
   businessName: "Panadería Norte",
   contactName: "Ana",
   contactEmail: "ana@example.com",
@@ -157,12 +158,40 @@ describe("submitMerchantApplication", () => {
     expect(result.ok).toBe(true);
     expect(deps.insertMerchantApplication).toHaveBeenCalledWith(
       expect.objectContaining({
+        applicantUserId: null,
         businessName: "Panadería Norte",
         contactEmail: "ana@example.com",
         cityId: CITY_ID,
         zoneId: ZONE_ID,
       }),
     );
+  });
+
+  it("persists a valid applicantUserId with the application", async () => {
+    const deps = submitDeps();
+    const applicantUserId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+    const result = await submitMerchantApplication(
+      { ...validSubmitInput, applicantUserId },
+      deps,
+    );
+    expect(result.ok).toBe(true);
+    expect(deps.insertMerchantApplication).toHaveBeenCalledWith(
+      expect.objectContaining({ applicantUserId }),
+    );
+  });
+
+  it("rejects an invalid applicantUserId before geography lookups", async () => {
+    const deps = submitDeps();
+    const result = await submitMerchantApplication(
+      { ...validSubmitInput, applicantUserId: "not-a-uuid" },
+      deps,
+    );
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe("INVALID_APPLICANT_USER_ID");
+    }
+    expect(deps.findCityById).not.toHaveBeenCalled();
+    expect(deps.insertMerchantApplication).not.toHaveBeenCalled();
   });
 
   it.each([

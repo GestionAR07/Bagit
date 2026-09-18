@@ -23,6 +23,10 @@ export const merchantApplications = pgTable(
   {
     id: idColumn(),
     status: text("status").notNull().default("PENDING"),
+    applicantUserId: uuid("applicant_user_id").references(
+      () => userProfiles.id,
+      { onDelete: "set null" },
+    ),
     businessName: text("business_name").notNull(),
     contactName: text("contact_name").notNull(),
     contactEmail: text("contact_email").notNull(),
@@ -52,6 +56,9 @@ export const merchantApplications = pgTable(
   },
   (table) => [
     index("merchant_applications_status_idx").on(table.status),
+    index("merchant_applications_applicant_user_id_idx").on(
+      table.applicantUserId,
+    ),
     index("merchant_applications_created_at_idx").on(table.createdAt),
     index("merchant_applications_contact_email_idx").on(table.contactEmail),
     uniqueIndex("merchant_applications_merchant_id_uidx").on(table.merchantId),

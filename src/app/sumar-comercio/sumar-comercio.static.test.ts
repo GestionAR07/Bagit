@@ -25,11 +25,12 @@ describe("public merchant application form (static)", () => {
   const actions = read("src/app/sumar-comercio/actions.ts");
   const cta = read("src/components/storefront/public-merchant-cta.tsx");
 
-  it("exposes /sumar-comercio without admin auth", () => {
+  it("exposes /sumar-comercio behind an active authenticated user", () => {
+    expect(page).toContain("requireActiveUser");
+    expect(page).toContain('redirect("/login?next=/sumar-comercio")');
+    expect(page).toContain('redirect("/acceso-denegado")');
     expect(page).not.toContain("loadAdminContext");
     expect(page).not.toContain("requirePlatformAdmin");
-    expect(page).not.toContain("redirect(");
-    expect(page).not.toContain("/login");
     expect(
       fs.existsSync(path.join(root, "src/app/sumar-comercio/page.tsx")),
     ).toBe(true);
@@ -62,6 +63,9 @@ describe("public merchant application form (static)", () => {
     expect(actions).toMatch(/formData\.get\(["']zoneId["']\)/);
     expect(actions).toMatch(/formData\.get\(["']description["']\)/);
     expect(actions).toMatch(/formData\.get\(["']message["']\)/);
+    expect(actions).toContain("requireActiveUser");
+    expect(actions).toContain("applicantUserId");
+    expect(actions).not.toMatch(/formData\.get\(["']applicantUserId["']\)/);
     expect(actions).not.toMatch(
       /submitMerchantApplicationApp\(\{[\s\S]*website/,
     );
@@ -99,13 +103,15 @@ describe("public merchant application form (static)", () => {
     expect(limits).toContain("MAX_PENDING_APPLICATIONS_PER_EMAIL = 3");
   });
 
-  it("does not accept status, merchantId, or reviewedByUserId from form data", () => {
+  it("does not accept status, merchantId, reviewedByUserId, or applicantUserId from form data", () => {
     expect(actions).not.toMatch(/formData\.get\(["']status["']\)/);
     expect(actions).not.toMatch(/formData\.get\(["']merchantId["']\)/);
     expect(actions).not.toMatch(/formData\.get\(["']reviewedByUserId["']\)/);
+    expect(actions).not.toMatch(/formData\.get\(["']applicantUserId["']\)/);
     expect(form).not.toContain('name="status"');
     expect(form).not.toContain('name="merchantId"');
     expect(form).not.toContain('name="reviewedByUserId"');
+    expect(form).not.toContain('name="applicantUserId"');
   });
 
   it("maps PENDING_DUPLICATE to a user-facing message", () => {
@@ -184,9 +190,9 @@ describe("public merchant application form (static)", () => {
 
   it("does not add public policies, migrations, or schema changes", () => {
     const migrations = listDrizzleMigrations();
-    expect(migrations).toHaveLength(10);
-    expect(migrations.at(-1)).toBe("0009_harden_trigger_function_execute.sql");
-    expect(migrations).toContain("0009_harden_trigger_function_execute.sql");
+    expect(migrations).toHaveLength(11);
+    expect(migrations.at(-1)).toBe("0010_salty_beyonder.sql");
+    expect(migrations).toContain("0010_salty_beyonder.sql");
 
     const pkg = read("package.json");
     expect(pkg).not.toContain('"upstash');

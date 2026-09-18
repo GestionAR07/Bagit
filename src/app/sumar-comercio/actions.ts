@@ -1,6 +1,8 @@
 "use server";
 
 import { submitMerchantApplicationApp } from "@/application/merchant/merchant-application-wiring";
+import { requireActiveUser } from "@/server/auth/authorization";
+import { isAuthzError } from "@/server/auth/errors";
 import type { SubmitMerchantApplicationActionState } from "./action-state";
 
 function mapDuplicateMessage(): SubmitMerchantApplicationActionState {
@@ -19,7 +21,22 @@ export async function submitMerchantApplicationAction(
     return { error: null, success: true };
   }
 
+  let applicantUserId: string;
+  try {
+    const context = await requireActiveUser();
+    applicantUserId = context.user.id;
+  } catch (error) {
+    if (isAuthzError(error)) {
+      return {
+        error: "Tenés que iniciar sesión para enviar la solicitud.",
+        success: false,
+      };
+    }
+    throw error;
+  }
+
   const result = await submitMerchantApplicationApp({
+    applicantUserId,
     businessName: String(formData.get("businessName") ?? ""),
     contactName: String(formData.get("contactName") ?? ""),
     contactEmail: String(formData.get("contactEmail") ?? ""),

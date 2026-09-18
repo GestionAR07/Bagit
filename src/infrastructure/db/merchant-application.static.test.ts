@@ -75,6 +75,7 @@ describe("merchant applications infrastructure (static)", () => {
     expect(columns).toEqual(
       expect.arrayContaining([
         "status",
+        "applicant_user_id",
         "business_name",
         "contact_name",
         "contact_email",

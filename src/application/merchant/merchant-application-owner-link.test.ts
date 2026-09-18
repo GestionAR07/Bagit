@@ -8,11 +8,15 @@ import {
 
 const CITY_ID = "11111111-1111-4111-8111-111111111111";
 const ZONE_ID = "22222222-2222-4222-8222-222222222222";
+const APPLICANT_USER_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 
-function pendingApplication(): MerchantApplicationRecord {
+function pendingApplication(
+  overrides: Partial<MerchantApplicationRecord> = {},
+): MerchantApplicationRecord {
   return {
     id: "app-1",
     status: "PENDING",
+    applicantUserId: null,
     businessName: "Panadería Norte",
     contactName: "Ana",
     contactEmail: "ana@example.com",
@@ -29,6 +33,7 @@ function pendingApplication(): MerchantApplicationRecord {
     rejectionReason: "",
     createdAt: new Date("2026-01-01T00:00:00.000Z"),
     updatedAt: new Date("2026-01-01T00:00:00.000Z"),
+    ...overrides,
   };
 }
 
@@ -95,7 +100,35 @@ function deps(
 const input = { applicationId: "app-1" };
 
 describe("merchant application registered owner linking", () => {
-  it("links the confirmed applicant as OWNER during approval", async () => {
+  it("assigns OWNER from applicantUserId without consulting auth email", async () => {
+    const sharedTx = { id: "shared-tx" };
+    const application = pendingApplication({
+      applicantUserId: APPLICANT_USER_ID,
+    });
+    const insertOwnerMembership = vi.fn(async (_input, tx) => {
+      expect(tx).toBe(sharedTx);
+    });
+    const current = deps({
+      findMerchantApplicationById: vi.fn(async () => application),
+      runTransaction: vi.fn(async (fn) => fn(sharedTx as never)),
+      insertOwnerMembership,
+    });
+
+    const result = await approveMerchantApplication(input, current);
+
+    expect(result.ok).toBe(true);
+    expect(current.findRegisteredUserByEmail).not.toHaveBeenCalled();
+    expect(current.ensureUserProfile).toHaveBeenCalledWith({
+      userId: APPLICANT_USER_ID,
+      displayName: "Ana",
+    });
+    expect(insertOwnerMembership).toHaveBeenCalledWith(
+      { merchantId: "merchant-1", userId: APPLICANT_USER_ID },
+      sharedTx,
+    );
+  });
+
+  it("falls back to confirmed applicant email when applicantUserId is null", async () => {
     const sharedTx = { id: "shared-tx" };
     const insertOwnerMembership = vi.fn(async (_input, tx) => {
       expect(tx).toBe(sharedTx);
@@ -155,8 +188,11 @@ describe("merchant application registered owner linking", () => {
     expect(current.insertOwnerMembership).not.toHaveBeenCalled();
   });
 
-  it("fails the approval if the atomic OWNER membership write fails", async () => {
+  it("rolls back the approval when insertOwnerMembership fails", async () => {
     const current = deps({
+      findMerchantApplicationById: vi.fn(async () =>
+        pendingApplication({ applicantUserId: APPLICANT_USER_ID }),
+      ),
       insertOwnerMembership: vi.fn(async () => {
         throw new Error("membership write failed");
       }),

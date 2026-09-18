@@ -22,6 +22,7 @@ export type MerchantApplicationError = {
 };
 
 export type SubmitMerchantApplicationInput = {
+  applicantUserId?: string;
   businessName: string;
   contactName: string;
   contactEmail: string;
@@ -96,6 +97,7 @@ export type SubmitMerchantApplicationDeps = {
     contactEmail: string,
   ) => Promise<number>;
   insertMerchantApplication: (input: {
+    applicantUserId?: string | null;
     businessName: string;
     contactName: string;
     contactEmail: string;
@@ -173,6 +175,14 @@ export async function submitMerchantApplication(
   const zoneId = input.zoneId.trim();
   const description = (input.description ?? "").trim();
   const message = (input.message ?? "").trim();
+  const applicantUserId = input.applicantUserId?.trim();
+
+  if (applicantUserId !== undefined && !isValidUuid(applicantUserId)) {
+    return err({
+      code: "INVALID_APPLICANT_USER_ID",
+      message: "La cuenta del solicitante no es válida.",
+    });
+  }
 
   if (!businessName) {
     return err({
@@ -298,6 +308,7 @@ export async function submitMerchantApplication(
   }
 
   const application = await deps.insertMerchantApplication({
+    applicantUserId: applicantUserId ?? null,
     businessName,
     contactName,
     contactEmail,
@@ -355,26 +366,32 @@ export async function approveMerchantApplication(
     });
   }
 
-  const registeredUser = await deps.findRegisteredUserByEmail(
-    application.contactEmail,
-  );
-  if (!registeredUser) {
-    return err({
-      code: "APPLICANT_ACCOUNT_REQUIRED",
-      message:
-        "El solicitante debe tener una cuenta registrada con el mismo email antes de aprobar la solicitud.",
-    });
-  }
-  if (!registeredUser.emailConfirmed) {
-    return err({
-      code: "APPLICANT_EMAIL_UNCONFIRMED",
-      message:
-        "El solicitante debe confirmar su email antes de que la solicitud pueda aprobarse.",
-    });
+  let ownerUserId: string;
+  if (application.applicantUserId) {
+    ownerUserId = application.applicantUserId;
+  } else {
+    const registeredUser = await deps.findRegisteredUserByEmail(
+      application.contactEmail,
+    );
+    if (!registeredUser) {
+      return err({
+        code: "APPLICANT_ACCOUNT_REQUIRED",
+        message:
+          "El solicitante debe tener una cuenta registrada con el mismo email antes de aprobar la solicitud.",
+      });
+    }
+    if (!registeredUser.emailConfirmed) {
+      return err({
+        code: "APPLICANT_EMAIL_UNCONFIRMED",
+        message:
+          "El solicitante debe confirmar su email antes de que la solicitud pueda aprobarse.",
+      });
+    }
+    ownerUserId = registeredUser.id;
   }
 
   await deps.ensureUserProfile({
-    userId: registeredUser.id,
+    userId: ownerUserId,
     displayName: application.contactName,
   });
 
@@ -420,7 +437,7 @@ export async function approveMerchantApplication(
 
       try {
         await deps.insertOwnerMembership(
-          { merchantId: merchant.id, userId: registeredUser.id },
+          { merchantId: merchant.id, userId: ownerUserId },
           tx,
         );
       } catch {
