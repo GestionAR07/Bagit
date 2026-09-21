@@ -62,3 +62,6 @@ Desktop.ini
 
 # local database backups — may contain production data
 /backups/
+
+# Local Netlify folder
+.netlify
