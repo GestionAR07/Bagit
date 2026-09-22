@@ -46,11 +46,14 @@ describe("supabase public config", () => {
       "utf8",
     );
     expect(source).toContain(
-      "NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL",
+      "process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL",
     );
     expect(source).toContain(
-      "process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      "process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??",
     );
+    expect(source).toContain("process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??");
+    expect(source).toContain("process.env.SUPABASE_PUBLISHABLE_KEY ??");
+    expect(source).toContain("process.env.SUPABASE_ANON_KEY");
     expect(source).not.toMatch(
       /export function hasSupabasePublicConfig\([^)]*=\s*process\.env/,
     );
