@@ -1,6 +1,7 @@
-"use client";
+﻿"use client";
 
-import Link from "next/link";
+import { startTransition } from "react";
+import { useRouter } from "next/navigation";
 
 /**
  * Route-level fallback. The root layout is still mounted, so existing Bag It
@@ -12,6 +13,15 @@ export default function AppError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const router = useRouter();
+
+  function handleRetry(): void {
+    startTransition(() => {
+      router.refresh();
+      reset();
+    });
+  }
+
   return (
     <main className="mx-auto flex w-full max-w-lg flex-1 flex-col justify-center px-4 py-16">
       <section className="rounded-[1.75rem] border border-sky-100/80 bg-white p-6 shadow-soft sm:p-8">
@@ -27,17 +37,17 @@ export default function AppError({
         <div className="mt-7 flex flex-col gap-3 sm:flex-row">
           <button
             type="button"
-            onClick={() => reset()}
+            onClick={handleRetry}
             className="pedilo-action-primary min-h-12 rounded-full px-5 text-sm"
           >
             Intentar nuevamente
           </button>
-          <Link
+          <a
             href="/"
             className="pedilo-action-secondary inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm"
           >
             Volver a Bag It
-          </Link>
+          </a>
         </div>
       </section>
     </main>
