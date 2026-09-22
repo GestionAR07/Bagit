@@ -2292,6 +2292,71 @@ body {
   gap: 0.5rem;
 }
 
+.merchant-workspace-hours {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.merchant-workspace-hours-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.merchant-workspace-hours-day {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  border: 1px solid #e0f2fe;
+  border-radius: 1rem;
+  background: #f8fcff;
+  padding: 0.9rem 1rem;
+}
+
+.merchant-workspace-hours-day-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.merchant-workspace-hours-day-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ps-navy);
+}
+
+.merchant-workspace-hours-intervals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.merchant-workspace-hours-interval {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.65rem;
+}
+
+.merchant-workspace-hours-time-field {
+  min-width: 7.5rem;
+  flex: 1 1 7.5rem;
+}
+
+.merchant-workspace-hours-remove {
+  flex: 0 0 auto;
+}
+
+.merchant-workspace-hours-closed-hint {
+  margin: 0;
+}
+
 .merchant-workspace-settings-stack {
   display: flex;
   flex-direction: column;

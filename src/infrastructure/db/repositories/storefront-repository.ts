@@ -366,6 +366,41 @@ export async function listOpeningIntervalsForMerchants(
     );
 }
 
+export type MerchantOpeningIntervalWrite = {
+  weekday: number;
+  openMinute: number;
+  closeMinute: number;
+};
+
+/**
+ * Replaces all opening intervals for a merchant in one transaction.
+ * Empty `intervals` clears the schedule (hours become unknown publicly).
+ */
+export async function replaceMerchantOpeningIntervals(
+  merchantId: string,
+  intervals: readonly MerchantOpeningIntervalWrite[],
+): Promise<void> {
+  const db = getDb();
+  await db.transaction(async (tx) => {
+    await tx
+      .delete(merchantOpeningIntervals)
+      .where(eq(merchantOpeningIntervals.merchantId, merchantId));
+
+    if (intervals.length === 0) {
+      return;
+    }
+
+    await tx.insert(merchantOpeningIntervals).values(
+      intervals.map((interval) => ({
+        merchantId,
+        weekday: interval.weekday,
+        openMinute: interval.openMinute,
+        closeMinute: interval.closeMinute,
+      })),
+    );
+  });
+}
+
 export async function listPublicActiveProductsForMerchant(
   merchantId: string,
 ): Promise<PublicCatalogProductRow[]> {

@@ -15,9 +15,13 @@ describe("merchant store profile presentation", () => {
     const returnBlock = profile.slice(profile.indexOf("return ("));
     const detailsIdx = returnBlock.indexOf("Datos del comercio");
     const coverIdx = returnBlock.indexOf("<MerchantCoverEditor");
+    const hoursIdx = returnBlock.indexOf("<MerchantHoursEditor");
     expect(detailsIdx).toBeGreaterThan(-1);
     expect(coverIdx).toBeGreaterThan(detailsIdx);
+    expect(hoursIdx).toBeGreaterThan(coverIdx);
     expect(profile).toContain("merchant-workspace-store-details");
+    expect(profile).toContain("saveMerchantHoursAction");
+    expect(profile).toContain("listOpeningIntervalsForMerchant");
     expect(profile).toContain("{merchant.name}");
     expect(profile).toContain("{merchant.cityName} / {merchant.zoneName}");
     expect(profile).toContain("{roleLabel}");
@@ -25,6 +29,7 @@ describe("merchant store profile presentation", () => {
     expect(profile).toContain("formatMerchantRoleLabel");
     expect(profile).toContain("formatMerchantStatusLabel");
     expect(css).toContain(".merchant-workspace-store-details-grid");
+    expect(css).toContain(".merchant-workspace-hours-list");
     expect(css).toMatch(
       /@media \(min-width: 640px\)[\s\S]*\.merchant-workspace-store-details-grid[\s\S]*grid-template-columns: repeat\(2/,
     );

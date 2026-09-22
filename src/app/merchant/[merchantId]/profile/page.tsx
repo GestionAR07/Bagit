@@ -3,13 +3,21 @@ import { getMerchantCoverPreviewApp } from "@/application/merchant/cover-image-w
 import { MerchantSettingsNav } from "@/components/merchant/merchant-settings-nav";
 import { MerchantWorkspacePage } from "@/components/merchant/merchant-workspace-page";
 import { findMerchantDetailForMember } from "@/infrastructure/db/repositories/merchant-repository";
+import {
+  listOpeningIntervalsForMerchant,
+  type PublicOpeningIntervalRecord,
+} from "@/infrastructure/db/repositories/storefront-repository";
+import { formatLocalMinuteAsClock } from "@/lib/local-weekday";
 import { isAuthzError } from "@/server/auth/errors";
 import { requireMerchantMembership } from "@/server/auth/authorization";
+import type { MerchantHoursDayInput } from "./action-state";
 import {
   deleteMerchantCoverAction,
+  saveMerchantHoursAction,
   upsertMerchantCoverAction,
 } from "./actions";
 import { MerchantCoverEditor } from "./merchant-cover-editor";
+import { MerchantHoursEditor } from "./merchant-hours-editor";
 
 export const dynamic = "force-dynamic";
 
@@ -63,10 +71,30 @@ function formatMerchantStatusLabel(status: string): string {
   }
 }
 
+function buildInitialSchedule(
+  intervals: readonly PublicOpeningIntervalRecord[],
+): MerchantHoursDayInput[] {
+  return Array.from({ length: 7 }, (_, weekday) => {
+    const dayIntervals = intervals
+      .filter((interval) => interval.weekday === weekday)
+      .map((interval) => ({
+        openTime: formatLocalMinuteAsClock(interval.openMinute),
+        closeTime: formatLocalMinuteAsClock(interval.closeMinute),
+      }));
+    return {
+      weekday,
+      enabled: dayIntervals.length > 0,
+      intervals: dayIntervals,
+    };
+  });
+}
+
 export default async function MerchantProfilePage({ params }: PageProps) {
   const { merchantId } = await params;
   const { user, merchant } = await loadPage(merchantId);
   const preview = await getMerchantCoverPreviewApp(merchantId);
+  const openingIntervals = await listOpeningIntervalsForMerchant(merchantId);
+  const initialSchedule = buildInitialSchedule(openingIntervals);
   const statusLabel = formatMerchantStatusLabel(merchant.status);
   const roleLabel = formatMerchantRoleLabel(merchant.role);
   const userLabel = user.email ?? user.id;
@@ -124,6 +152,11 @@ export default async function MerchantProfilePage({ params }: PageProps) {
           coverUrl={preview.coverUrl}
           upsertAction={upsertMerchantCoverAction}
           deleteAction={deleteMerchantCoverAction}
+        />
+        <MerchantHoursEditor
+          merchantId={merchantId}
+          initialSchedule={initialSchedule}
+          saveAction={saveMerchantHoursAction}
         />
       </div>
     </MerchantWorkspacePage>
