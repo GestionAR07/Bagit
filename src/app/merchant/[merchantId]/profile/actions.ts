@@ -75,9 +75,7 @@ function intervalsOverlap(
   );
 }
 
-function buildOpeningRows(
-  schedule: MerchantHoursDayInput[],
-):
+function buildOpeningRows(schedule: MerchantHoursDayInput[]):
   | {
       ok: true;
       rows: Array<{ weekday: number; openMinute: number; closeMinute: number }>;

@@ -1,6 +1,7 @@
 ﻿"use client";
 
 import { startTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 /**
@@ -42,12 +43,12 @@ export default function AppError({
           >
             Intentar nuevamente
           </button>
-          <a
+          <Link
             href="/"
             className="pedilo-action-secondary inline-flex min-h-12 items-center justify-center rounded-full px-5 text-sm"
           >
             Volver a Bag It
-          </a>
+          </Link>
         </div>
       </section>
     </main>

@@ -36,7 +36,9 @@ const DEFAULT_INTERVAL: MerchantHoursIntervalInput = {
 const UNEXPECTED_ACTION_ERROR =
   "No se pudo completar la operación. Intentá de nuevo.";
 
-function cloneSchedule(schedule: MerchantHoursDayInput[]): MerchantHoursDayInput[] {
+function cloneSchedule(
+  schedule: MerchantHoursDayInput[],
+): MerchantHoursDayInput[] {
   return schedule.map((day) => ({
     weekday: day.weekday,
     enabled: day.enabled,
@@ -51,7 +53,9 @@ export function MerchantHoursEditor({
 }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
-  const [schedule, setSchedule] = useState(() => cloneSchedule(initialSchedule));
+  const [schedule, setSchedule] = useState(() =>
+    cloneSchedule(initialSchedule),
+  );
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
